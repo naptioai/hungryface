@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Naptio — About</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <!-- Shared sidebar stylesheet to retain site look & feel -->
+  <link rel="stylesheet" href="/hungryface/webrtc/receiver/shared/sidebar.css" />
+  <style>
+    :root { color-scheme: dark; }
+    html, body {
+      margin:0; background:#000; color:#fff;
+      font-family:-apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial,
+        "Noto Sans", "Noto Sans Arabic", "Noto Sans Hebrew",
+        "Noto Sans SC", "Noto Sans KR", "Noto Sans JP", "Noto Sans Devanagari", sans-serif;
+    }
+    /* Allow scroll under fixed sidebar */
+    body { overflow-x:hidden; }
+
+    /* Visually hidden for screen readers */
+    .sr-only {
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    }
+
+    /* Layout wrapper */
+    .wrap { min-height:100dvh; display:grid; place-items:start center; padding:16px; }
+
+    /* Card panel style (matches other pages) */
+    .panel {
+      width:min(100%, 1000px);
+      background:#0b0b0b;
+      border:1px solid #141414;
+      border-radius:14px;
+      padding:16px;
+      margin:16px auto 24px;
+      box-shadow: 0 0 0 1px #0b0b0b inset;
+    }
+
+    /* Top bar: logo left, language on the right */
+    .topbar {
+      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px;
+    }
+    .logo-link { display:inline-flex; align-items:center; line-height:1; text-decoration:none; color:#fff; opacity:.95; }
+    .logo-link:hover, .logo-link:focus { opacity:1; text-decoration:none; }
+    .icon { width: 26px; height: 26px; display:block; }
+    .icon-home { width:28px; height:28px; }
+
+    h1 { margin:.25rem 0 .5rem; font-size:22px; line-height:1.25; }
+    h2 { margin:1.25rem 0 .5rem; font-size:18px; line-height:1.3; }
+    p  { margin:.5rem 0; color:#ddd; }
+    ul { margin:.5rem 0 .75rem 1.1rem; padding:0; }
+    li { margin:.3rem 0; color:#ddd; }
+
+    .muted { color:#aaa; }
+    .fineprint { font-size:.92rem; color:#ccc; }
+
+    /* Language selector */
+    .lang {
+      display:flex; align-items:center; gap:8px;
+      background:#0d0d0d; border:1px solid #1a1a1a; border-radius:999px;
+      padding:6px 10px;
+    }
+    .lang label { font-size:.9rem; color:#aaa; }
+    .lang select {
+      appearance:none; -webkit-appearance:none; -moz-appearance:none;
+      background:#0d0d0d; color:#fff; border:none; outline:none;
+      padding:4px 18px 4px 6px; cursor:pointer; font-size:.95rem; border-radius:10px;
+    }
+    /* Make dropdown list readable across browsers */
+    .lang option { background:#0d0d0d; color:#fff; }
+    @media (prefers-color-scheme: light) {
+      .lang select { background:#fff; color:#000; }
+      .lang option  { background:#fff; color:#000; }
+    }
+
+    .lang select:focus { outline:2px solid #2a2a2a; border-radius:8px; }
+
+    /* RTL support */
+    .rtl .panel { direction:rtl; }
+    .rtl ul { margin:.5rem 1.1rem .75rem 0; }
+
+    /* Subtle separator */
+    .hr { height:1px; background:#141414; margin:12px 0; border-radius:1px; }
+
+    /* Links (if any) */
+    a { color:#9ad; text-decoration:none; }
+    a:hover, a:focus { text-decoration:underline; }
+
+    /* Make headings slightly softer */
+    .soft { color:#eee; }
+
+    /* Responsive tweaks */
+    @media (max-width:520px){
+      .wrap { padding:12px; }
+      .panel { padding:14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <div class="topbar">
+        <!-- Logo → landing page. Matches the home page sprite/placement. -->
+        <a class="logo-link" href="https://hungryfaceai.github.io/hungryface/home/" aria-label="Home">
+          <svg class="icon icon-home" aria-hidden="true" focusable="false">
+            <use href="/hungryface/assets/icons.svg#icon-cradle-ai" xlink:href="/hungryface/assets/icons.svg#icon-cradle-ai"></use>
+          </svg>
+          <span class="sr-only">Home</span>
+        </a>
+
+        <!-- Language selector (no leading flag to avoid duplicate country icons) -->
+        <div class="lang" role="group" aria-label="Language selector">
+          <label for="lang" id="t-language-label" class="sr-only">Language</label>
+          <select id="lang" aria-labelledby="t-language-label">
+            <option value="en">🇬🇧 English</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="pt">🇵🇹 Português</option>
+            <option value="ar">🇸🇦 العربية</option>
+            <option value="ru">🇷🇺 Русский</option>
+            <option value="uk">🇺🇦 Українська</option>
+            <option value="he">🇮🇱 עברית</option>
+            <option value="zh">🇨🇳 中文</option>
+            <option value="ko">🇰🇷 한국어</option>
+            <option value="hi">🇮🇳 हिन्दी</option>
+            <option value="ja">🇯🇵 日本語</option>
+          </select>
+        </div>
+      </div>
+
+      <h1 id="t-title" class="soft">About Naptio</h1>
+
+      <p id="t-intro-1"></p>
+      <p id="t-intro-2"></p>
+
+      <h2 id="t-how-title"></h2>
+      <p id="t-how-body"></p>
+
+      <h2 id="t-privacy-title"></h2>
+      <ul id="t-privacy-list"></ul>
+
+      <h2 id="t-why-title"></h2>
+      <ul id="t-why-list"></ul>
+
+      <div class="hr" aria-hidden="true"></div>
+
+      <h2 id="t-safety-title"></h2>
+      <p id="t-safety-body" class="fineprint"></p>
+
+      <h2 id="t-team-title"></h2>
+      <p id="t-team-body"></p>
+    </div>
+  </div>
+
+  <script type="module">
+    // Simple i18n for the About page. Persists selection and handles RTL.
+    const I18N = {
+      en: {
+        name: "English", dir: "ltr",
+        title: "About Naptio",
+        intro1: "Naptio is a private, on-device baby monitor that runs right in your browser. Pop a spare phone in the nursery as the camera and check in from any other phone or laptop—no accounts, no subscriptions, no ads.",
+        intro2: "",
+        howTitle: "How it works",
+        howBody: "Naptio securely connects your own devices and uses gentle, on-device AI to help you notice the moments that matter—like crying, bigger movements, or sleep-position cues. Because everything runs locally, nothing is uploaded to the cloud and there’s no app to install.",
+        privacyTitle: "Privacy by design",
+        privacyList: [
+          "Your video and audio stay with you. We never see or store your baby’s footage.",
+          "Secure by default. Connections between your devices are end-to-end encrypted.",
+          "You’re in control. Pick the alerts you want, pair/unpair devices, or reset any time."
+        ],
+        whyTitle: "Why parents like it",
+        whyList: [
+          "Works with the phones and laptops you already have",
+          "Quick setup with a simple pairing flow",
+          "Helpful AI cues without complicated settings",
+          "Free to use"
+        ],
+        safetyTitle: "Important safety note",
+        safetyBody: "Naptio is not a medical device and doesn’t diagnose, treat, or prevent any condition. It’s a helper, not a substitute for parental supervision or professional advice. Always follow safe-sleep guidance.",
+        teamTitle: "The Naptio team",
+        teamBody: "We’re a small, hands-on team who love building useful, privacy-first tools. Before Naptio, we spent years crafting high-reliability models in a very demanding industry—work that taught us to obsess over accuracy, security, and performance. Now we’re bringing that same care to something closer to home: helping families rest a little easier. And we’re committed to keeping Naptio available to everyone, for free."
+      },
+      es: {
+        name: "Español", dir: "ltr",
+        title: "Acerca de Naptio",
+        intro1: "Naptio es un vigilabebés privado que funciona en tu propio dispositivo y directamente en el navegador. Coloca un teléfono de repuesto en la habitación como cámara y vigila desde otro teléfono u ordenador—sin cuentas, sin suscripciones, sin anuncios.",
+        intro2: "",
+        howTitle: "Cómo funciona",
+        howBody: "Naptio conecta de forma segura tus propios dispositivos y usa una IA ligera, en el propio dispositivo, para ayudarte a detectar los momentos importantes—como el llanto, movimientos grandes o señales de postura al dormir. Como todo funciona de forma local, no se sube nada a la nube y no hay que instalar ninguna app.",
+        privacyTitle: "Privacidad por diseño",
+        privacyList: [
+          "Tu vídeo y audio se quedan contigo. Nunca vemos ni guardamos las imágenes de tu bebé.",
+          "Seguro por defecto. Las conexiones entre tus dispositivos están cifradas de extremo a extremo.",
+          "Tú tienes el control. Elige las alertas que quieres, empareja/desempareja dispositivos o restablece cuando quieras."
+        ],
+        whyTitle: "Por qué les gusta a los padres",
+        whyList: [
+          "Funciona con los teléfonos y ordenadores que ya tienes",
+          "Configuración rápida con un emparejamiento sencillo",
+          "Indicaciones útiles de IA sin ajustes complicados",
+          "Gratis"
+        ],
+        safetyTitle: "Aviso importante de seguridad",
+        safetyBody: "Naptio no es un dispositivo médico y no diagnostica, trata ni previene ninguna afección. Es una ayuda, no un sustituto de la supervisión de los padres ni del consejo profesional. Sigue siempre las recomendaciones de sueño seguro.",
+        teamTitle: "El equipo de Naptio",
+        teamBody: "Somos un equipo pequeño y cercano al producto; nos encanta crear herramientas útiles y con la privacidad como prioridad. Antes de Naptio, pasamos años desarrollando modelos de alta fiabilidad en un sector muy exigente—un trabajo que nos enseñó a obsesionarnos con la precisión, la seguridad y el rendimiento. Ahora ponemos ese mismo cuidado en algo más cercano: ayudar a las familias a descansar un poco mejor. Y nos comprometemos a mantener Naptio disponible para todos, gratis."
+      },
+      fr: {
+        name: "Français", dir: "ltr",
+        title: "À propos de Naptio",
+        intro1: "Naptio est un babyphone privé, sur votre appareil, qui fonctionne directement dans votre navigateur. Posez un téléphone de rechange dans la chambre comme caméra et surveillez depuis un autre téléphone ou un ordinateur — sans compte, sans abonnement, sans publicité.",
+        intro2: "",
+        howTitle: "Comment ça marche",
+        howBody: "Naptio connecte en toute sécurité vos propres appareils et utilise une IA légère, exécutée localement, pour vous aider à remarquer les moments qui comptent — pleurs, grands mouvements ou indices de position de sommeil. Comme tout fonctionne en local, rien n’est envoyé dans le cloud et il n’y a aucune application à installer.",
+        privacyTitle: "Confidentialité dès la conception",
+        privacyList: [
+          "Vos vidéos et sons restent chez vous. Nous ne voyons ni ne stockons jamais les images de votre bébé.",
+          "Sécurisé par défaut. Les connexions entre vos appareils sont chiffrées de bout en bout.",
+          "Vous gardez la main. Choisissez les alertes, associez/dissociez des appareils ou réinitialisez à tout moment."
+        ],
+        whyTitle: "Pourquoi les parents l’aiment",
+        whyList: [
+          "Fonctionne avec les téléphones et ordinateurs que vous avez déjà",
+          "Mise en route rapide avec un appairage simple",
+          "Aides IA utiles sans réglages compliqués",
+          "Gratuit"
+        ],
+        safetyTitle: "Avertissement important de sécurité",
+        safetyBody: "Naptio n’est pas un dispositif médical et ne diagnostique, ne traite ni ne prévient aucune maladie. C’est un assistant, pas un substitut à la surveillance parentale ni aux conseils de professionnels. Suivez toujours les recommandations de sommeil sécurisé.",
+        teamTitle: "L’équipe Naptio",
+        teamBody: "Nous sommes une petite équipe, proche du terrain, qui aime créer des outils utiles où la confidentialité passe en premier. Avant Naptio, nous avons passé des années à concevoir des modèles très fiables dans un secteur très exigeant — un travail qui nous a appris à privilégier la précision, la sécurité et la performance. Nous mettons aujourd’hui ce même soin au service de quelque chose de plus proche de nous : aider les familles à dormir un peu plus sereinement. Et nous nous engageons à garder Naptio accessible à tous, gratuitement."
+      },
+      pt: {
+        name: "Português", dir: "ltr",
+        title: "Sobre o Naptio",
+        intro1: "O Naptio é um baby monitor privado que funciona diretamente no seu navegador. Coloque um telefone extra no quarto do bebé como câmara e acompanhe a partir de outro telefone ou computador — sem contas, sem subscrições, sem anúncios.",
+        intro2: "",
+        howTitle: "Como funciona",
+        howBody: "O Naptio liga com segurança os seus próprios dispositivos e utiliza uma IA leve, a correr no próprio dispositivo, para o ajudar a notar os momentos que importam — como choro, movimentos maiores ou indícios de posição de sono. Como tudo funciona localmente, nada é enviado para a nuvem e não é preciso instalar aplicações.",
+        privacyTitle: "Privacidade por conceção",
+        privacyList: [
+          "O seu vídeo e áudio ficam consigo. Nunca vemos nem guardamos as imagens do seu bebé.",
+          "Seguro por omissão. As ligações entre os seus dispositivos são encriptadas de extremo a extremo.",
+          "O controlo é seu. Escolha os alertas que pretende, emparelhe/desemparelhe dispositivos e reponha quando quiser."
+        ],
+        whyTitle: "Porque os pais gostam",
+        whyList: [
+          "Funciona com os telefones e computadores que já tem",
+          "Configuração rápida com emparelhamento simples",
+          "Sinais úteis de IA sem definições complicadas",
+          "Gratuito"
+        ],
+        safetyTitle: "Nota importante de segurança",
+        safetyBody: "O Naptio não é um dispositivo médico e não diagnostica, trata ou previne qualquer condição. É um auxiliar, não um substituto da supervisão parental nem do aconselhamento profissional. Siga sempre as orientações de sono seguro.",
+        teamTitle: "A equipa Naptio",
+        teamBody: "Somos uma equipa pequena e prática que adora criar ferramentas úteis, com a privacidade em primeiro lugar. Antes do Naptio, passámos anos a construir modelos de alta fiabilidade numa área muito exigente — trabalho que nos ensinou a valorizar precisão, segurança e desempenho. Agora trazemos o mesmo cuidado para algo mais próximo de casa: ajudar as famílias a descansar um pouco melhor. E comprometemo-nos a manter o Naptio disponível para todos, gratuitamente."
+      },
+      ar: {
+        name: "العربية", dir: "rtl",
+        title: "نبذة عن Naptio",
+        intro1: "‏Naptio هو جهاز مراقبة أطفال خاص يعمل على جهازك مباشرة داخل المتصفح. ضع هاتفًا إضافيًا في غرفة الطفل ككاميرا وتابع من أي هاتف أو كمبيوتر آخر — بلا حسابات، بلا اشتراكات، بلا إعلانات.",
+        intro2: "",
+        howTitle: "كيف يعمل",
+        howBody: "يربط Naptio أجهزتك ببعضها بأمان ويستخدم ذكاءً اصطناعيًا خفيفًا يعمل على الجهاز لمساعدتك على ملاحظة اللحظات المهمة — مثل البكاء أو التحركات الكبيرة أو إشارات وضعية النوم. ولأن كل شيء يعمل محليًا، فلا يتم رفع أي شيء إلى السحابة ولا حاجة لتثبيت تطبيق.",
+        privacyTitle: "الخصوصية أولًا",
+        privacyList: [
+          "يبقى الفيديو والصوت لديك. نحن لا نرى أو نخزّن مقاطع طفلك.",
+          "أمان تلقائي. الاتصالات بين أجهزتك مشفّرة من طرف إلى طرف.",
+          "التحكم بين يديك. اختر التنبيهات، واقرن أو افصل الأجهزة، وأعد الضبط في أي وقت."
+        ],
+        whyTitle: "لماذا يفضله الأهل",
+        whyList: [
+          "يعمل مع الهواتف وأجهزة الكمبيوتر المتوفرة لديك",
+          "إعداد سريع وخطوات اقتران بسيطة",
+          "مؤشرات مفيدة من الذكاء الاصطناعي دون إعدادات معقّدة",
+          "مجاني"
+        ],
+        safetyTitle: "ملاحظة أمان مهمة",
+        safetyBody: "‏Naptio ليس جهازًا طبيًا ولا يشخّص أو يعالج أو يمنع أي حالة. إنه أداة مساعدة وليس بديلًا عن إشراف الوالدين أو المشورة المهنية. اتبع دائمًا إرشادات النوم الآمن.",
+        teamTitle: "فريق Naptio",
+        teamBody: "نحن فريق صغير وعملي نحب بناء أدوات مفيدة تضع الخصوصية أولًا. قبل Naptio أمضينا سنوات نطوّر نماذج عالية الاعتمادية في صناعة شديدة المتطلبات — ما علّمنا التركيز على الدقة والأمان والأداء. واليوم نضع هذا الاهتمام في شيء أقرب إلى قلوبنا: مساعدة العائلات على نوم أكثر راحة. ونحن ملتزمون بأن يبقى Naptio متاحًا للجميع مجانًا."
+      },
+      ru: {
+        name: "Русский", dir: "ltr",
+        title: "О Naptio",
+        intro1: "Naptio — это приватный детский монитор, который работает прямо в браузере на ваших устройствах. Поставьте запасной телефон в детской как камеру и наблюдайте с другого телефона или ноутбука — без аккаунтов, подписок и рекламы.",
+        intro2: "",
+        howTitle: "Как это работает",
+        howBody: "Naptio безопасно соединяет ваши устройства и использует лёгкий ИИ на самом устройстве, чтобы помогать замечать важные моменты — например плач, активные движения или сигналы позы сна. Поскольку всё работает локально, ничего не загружается в облако и не требуется установка приложения.",
+        privacyTitle: "Конфиденциальность по замыслу",
+        privacyList: [
+          "Ваше видео и звук остаются у вас. Мы никогда не видим и не храним записи вашего ребёнка.",
+          "Безопасность по умолчанию. Соединения между устройствами шифруются сквозным образом.",
+          "Вы контролируете процесс. Выбирайте нужные оповещения, подключайте/отключайте устройства и сбрасывайте настройки в любое время."
+        ],
+        whyTitle: "Почему родителям это нравится",
+        whyList: [
+          "Работает с телефонами и компьютерами, которые у вас уже есть",
+          "Быстрая настройка с простым сопряжением",
+          "Полезные подсказки ИИ без сложных настроек",
+          "Бесплатно"
+        ],
+        safetyTitle: "Важное замечание по безопасности",
+        safetyBody: "Naptio не является медицинским изделием и не предназначен для диагностики, лечения или профилактики заболеваний. Это помощник, а не замена присмотру родителей или профессиональным рекомендациям. Всегда следуйте правилам безопасного сна.",
+        teamTitle: "Команда Naptio",
+        teamBody: "Мы небольшая команда, которая любит создавать полезные продукты с приоритетом приватности. До Naptio мы много лет разрабатывали высоконадёжные модели в очень требовательной сфере — это научило нас ценить точность, безопасность и производительность. Теперь с тем же вниманием мы помогаем семьям отдыхать спокойнее и держим Naptio доступным для всех — бесплатно."
+      },
+      uk: {
+        name: "Українська", dir: "ltr",
+        title: "Про Naptio",
+        intro1: "Naptio — це приватний монітор для немовлят, що працює просто у вашому браузері. Поставте запасний телефон у дитячій як камеру та дивіться з іншого телефону або ноутбука — без обліковок, підписок і реклами.",
+        intro2: "",
+        howTitle: "Як це працює",
+        howBody: "Naptio безпечно з’єднує ваші пристрої та використовує легку локальну ШІ, щоб допомогти помічати важливі моменти — як-от плач, активні рухи чи підказки пози під час сну. Оскільки все працює локально, нічого не завантажується в хмару і не потрібно встановлювати застосунок.",
+        privacyTitle: "Конфіденційність за задумом",
+        privacyList: [
+          "Ваші відео та звук залишаються з вами. Ми ніколи не бачимо й не зберігаємо записи вашої дитини.",
+          "Безпека за замовчуванням. З’єднання між пристроями шифруються наскрізно.",
+          "Контроль у ваших руках. Обирайте потрібні сповіщення, з’єднуйте/від’єднуйте пристрої та скидайте налаштування будь-коли."
+        ],
+        whyTitle: "Чому це подобається батькам",
+        whyList: [
+          "Працює з телефонами та комп’ютерами, які у вас уже є",
+          "Швидкий старт із простим сполученням",
+          "Корисні підказки ШІ без складних налаштувань",
+          "Безкоштовно"
+        ],
+        safetyTitle: "Важлива примітка щодо безпеки",
+        safetyBody: "Naptio не є медичним виробом і не призначений для діагностики, лікування або профілактики захворювань. Це помічник, а не заміна батьківського нагляду чи професійних порад. Завжди дотримуйтесь рекомендацій безпечного сну.",
+        teamTitle: "Команда Naptio",
+        teamBody: "Ми невелика команда, що створює корисні інструменти із пріоритетом приватності. Раніше ми багато років розробляли високонадійні моделі в дуже вимогливій сфері — це навчило нас точності, безпеці та продуктивності. Тепер застосовуємо той самий підхід, щоб допомагати родинам відпочивати спокійніше, і тримаємо Naptio відкритим для всіх — безкоштовно."
+      },
+      he: {
+        name: "עברית", dir: "rtl",
+        title: "על Naptio",
+        intro1: "‏Naptio הוא מוניטור תינוקות פרטי שפועל ישירות בדפדפן במכשיר שלך. הניחו טלפון נוסף בחדר כמצלמה וצפו מכל טלפון או מחשב אחר — ללא חשבונות, ללא מנויים וללא פרסומות.",
+        intro2: "",
+        howTitle: "איך זה עובד",
+        howBody: "‏Naptio מחבר את המכשירים שלך בצורה מאובטחת ומשתמש ב-AI קל שרץ מקומית כדי לעזור לשים לב לרגעים חשובים — כמו בכי, תנועות גדולות או רמזים על תנוחת שינה. מאחר שהכול פועל מקומית, שום דבר לא מועלה לענן ואין צורך להתקין אפליקציה.",
+        privacyTitle: "פרטיות כעיקרון מנחה",
+        privacyList: [
+          "הווידאו והאודיו שלך נשארים אצלך. אנחנו לעולם לא רואים או שומרים צילומים של התינוק.",
+          "אבטחה כברירת מחדל. החיבור בין המכשירים מוצפן מקצה לקצה.",
+          "השליטה בידיים שלך. בחרי/בחר את ההתראות, חברי/חבר או נתקי/נתק מכשירים, ואפסו בכל עת."
+        ],
+        whyTitle: "למה הורים אוהבים את זה",
+        whyList: [
+          "עובד עם הטלפונים והמחשבים שכבר יש לכם",
+          "הגדרה מהירה עם תהליך צימוד פשוט",
+          "רמזי AI מועילים ללא הגדרות מורכבות",
+          "בחינם"
+        ],
+        safetyTitle: "הערת בטיחות חשובה",
+        safetyBody: "‏Naptio אינו מכשיר רפואי ואינו מאבחן, מטפל או מונע מצבים רפואיים. הוא כלי מסייע — לא תחליף להשגחת הורים או לייעוץ מקצועי. תמיד הקפידו על הנחיות שינה בטוחה.",
+        teamTitle: "צוות Naptio",
+        teamBody: "אנחנו צוות קטן ומעשי שאוהב לבנות כלים שימושיים עם פרטיות תחילה. לפני Naptio עבדנו שנים על מודלים אמינים במיוחד בתעשייה תובענית — מה שלימד אותנו להתמקד בדיוק, באבטחה ובביצועים. עכשיו אנחנו מביאים את אותה תשומת לב לדבר הקרוב לבית: לעזור למשפחות לנוח בראש שקט — ובחינם."
+      },
+      zh: {
+        name: "中文", dir: "ltr",
+        title: "关于 Naptio",
+        intro1: "Naptio 是一款在您设备上运行的私密婴儿监护工具，直接在浏览器中使用。把一部备用手机放在婴儿房作为摄像头，再用另一部手机或电脑查看——无需账号、无需订阅、无广告。",
+        intro2: "",
+        howTitle: "工作原理",
+        howBody: "Naptio 将您的设备安全连接，并使用在本地运行的轻量级 AI，帮助您捕捉关键时刻——例如哭声、较大的动作或睡姿提示。由于一切都在本地完成，不会上传到云端，也无需安装应用。",
+        privacyTitle: "从设计上保护隐私",
+        privacyList: [
+          "您的音视频只属于您。我们从不查看或存储您宝宝的影像。",
+          "默认安全。设备之间的连接采用端到端加密。",
+          "您说了算。选择需要的提醒，配对/取消配对设备，随时重置。"
+        ],
+        whyTitle: "家长为何喜欢",
+        whyList: [
+          "可直接使用您已有的手机与电脑",
+          "简单的配对流程，快速上手",
+          "有用的 AI 提示，无需复杂设置",
+          "免费使用"
+        ],
+        safetyTitle: "重要安全提示",
+        safetyBody: "Naptio 不是医疗设备，不能用于诊断、治疗或预防任何疾病。它只是辅助工具，不能替代家长看护或专业建议。请始终遵循安全睡眠指南。",
+        teamTitle: "Naptio 团队",
+        teamBody: "我们是一个小而专注的团队，热衷于打造实用、以隐私为先的工具。在做 Naptio 之前，我们多年专注于高可靠性模型，在严苛领域磨练了对准确性、安全性与性能的执着。现在，我们把同样的用心带到家人身边，让更多家庭睡得安心，而且免费。"
+      },
+      ko: {
+        name: "한국어", dir: "ltr",
+        title: "Naptio 소개",
+        intro1: "Naptio는 기기에서 직접 실행되는 프라이버시 중심 아기 모니터로, 브라우저만 있으면 됩니다. 여분의 휴대폰을 아기방 카메라로 두고, 다른 휴대폰이나 노트북에서 확인하세요—계정, 구독, 광고 모두 없습니다.",
+        intro2: "",
+        howTitle: "동작 방식",
+        howBody: "Naptio는 사용자의 기기끼리를 안전하게 연결하고, 온디바이스 경량 AI로 울음, 큰 움직임, 수면 자세 신호 같은 중요한 순간을 알아채도록 도와줍니다. 모든 처리가 로컬에서 이뤄지므로 클라우드 업로드가 없고 앱 설치도 필요 없습니다.",
+        privacyTitle: "설계 단계부터 프라이버시",
+        privacyList: [
+          "영상과 음성은 사용자에게만 남습니다. 아기 영상은 저장하거나 보지 않습니다.",
+          "기본적으로 안전합니다. 기기간 연결은 종단간 암호화됩니다.",
+          "사용자 제어. 원하는 알림을 선택하고, 기기 페어링/해제를 하거나 언제든 초기화할 수 있습니다."
+        ],
+        whyTitle: "부모들이 좋아하는 이유",
+        whyList: [
+          "이미 가지고 있는 휴대폰과 노트북으로 작동",
+          "간단한 페어링으로 빠른 설정",
+          "복잡한 설정 없는 유용한 AI 힌트",
+          "무료"
+        ],
+        safetyTitle: "중요 안전 안내",
+        safetyBody: "Naptio는 의료기기가 아니며 어떠한 질환도 진단·치료·예방하지 않습니다. 보호자 감독이나 전문가의 조언을 대신할 수 없습니다. 항상 안전 수면 수칙을 따르세요.",
+        teamTitle: "Naptio 팀",
+        teamBody: "우리는 프라이버시를 최우선으로 하는 유용한 도구를 만드는 것을 좋아하는 작은 팀입니다. Naptio 이전에 매우 까다로운 분야에서 고신뢰 모델을 다년간 구축하며 정확성, 보안, 성능에 집착하는 법을 배웠습니다. 이제 그 정성을 가정에 가까운 문제에 적용해, 가족들이 더 편히 쉴 수 있도록 돕습니다. 그리고 누구나 무료로 쓰실 수 있게 하겠습니다."
+      },
+      hi: {
+        name: "हिन्दी", dir: "ltr",
+        title: "Naptio के बारे में",
+        intro1: "Naptio एक निजी, ऑन-डिवाइस बेबी मॉनिटर है जो सीधे आपके ब्राउज़र में चलता है। नर्सरी में एक अतिरिक्त फ़ोन को कैमरा बना दें और किसी भी दूसरे फ़ोन या लैपटॉप से देखें—न खाता चाहिए, न सदस्यता, न विज्ञापन।",
+        intro2: "",
+        howTitle: "यह काम कैसे करता है",
+        howBody: "Naptio आपके डिवाइसों को सुरक्षित रूप से जोड़ता है और हल्का, ऑन-डिवाइस AI उपयोग करता है ताकि रोना, बड़े मूवमेंट या स्लीप-पोज संकेत जैसे महत्वपूर्ण पल आप तक पहुँचें। क्योंकि सब कुछ लोकल चलता है, क्लाउड पर कुछ अपलोड नहीं होता और कोई ऐप इंस्टॉल नहीं करनी पड़ती।",
+        privacyTitle: "डिज़ाइन से ही गोपनीयता",
+        privacyList: [
+          "आपका वीडियो और ऑडियो आपके पास ही रहता है। हम आपके बच्चे की फुटेज न देखते हैं, न सहेजते हैं।",
+          "डिफ़ॉल्ट रूप से सुरक्षित। आपके डिवाइसों के बीच कनेक्शन एंड-टू-एंड एन्क्रिप्टेड हैं।",
+          "नियंत्रण आपके हाथ में। किन अलर्ट्स की ज़रूरत है चुनें, डिवाइस पेयर/अनपेयर करें, या कभी भी रीसेट करें।"
+        ],
+        whyTitle: "माता-पिता इसे क्यों पसंद करते हैं",
+        whyList: [
+          "उन्हीं फ़ोनों और लैपटॉप के साथ काम करता है जो आपके पास हैं",
+          "सरल पेयरिंग के साथ तेज़ सेटअप",
+          "जटिल सेटिंग्स के बिना उपयोगी AI संकेत",
+          "मुफ़्त"
+        ],
+        safetyTitle: "महत्वपूर्ण सुरक्षा नोट",
+        safetyBody: "Naptio कोई चिकित्सा उपकरण नहीं है और किसी भी स्थिति का निदान, उपचार या रोकथाम नहीं करता। यह सहायक है—माता-पिता की निगरानी या पेशेवर सलाह का विकल्प नहीं। हमेशा सुरक्षित नींद के दिशा-निर्देशों का पालन करें।",
+        teamTitle: "Naptio टीम",
+        teamBody: "हम एक छोटी, व्यावहारिक टीम हैं जो प्राइवेसी-फर्स्ट, उपयोगी टूल बनाना पसंद करती है। Naptio से पहले, हमने एक अत्यंत चुनौतीपूर्ण क्षेत्र में उच्च-विश्वसनीयता वाले मॉडल वर्षों तक बनाए—जिसने हमें सटीकता, सुरक्षा और प्रदर्शन के प्रति समर्पित रहना सिखाया। अब वही देखभाल घर के करीब किसी चीज़ पर—परिवारों की बेहतर नींद—पर लगा रहे हैं, और Naptio सबके लिए मुफ़्त रखने के लिए प्रतिबद्ध हैं।"
+      },
+      ja: {
+        name: "日本語", dir: "ltr",
+        title: "Naptio について",
+        intro1: "Naptio はデバイス上で動作するプライバシー重視のベビーモニターです。ブラウザだけで使えます。予備のスマホをカメラとして寝室に置き、もう一台のスマホやノートPCから確認できます—アカウント、サブスク、広告は不要です。",
+        intro2: "",
+        howTitle: "仕組み",
+        howBody: "Naptio はあなたのデバイス同士を安全に接続し、デバイス上で動く軽量 AI によって、泣き声や大きな動き、睡眠姿勢のヒントなど大切な瞬間に気づけるよう支援します。すべてがローカルで処理されるため、クラウドにアップロードされることはなく、アプリのインストールも不要です。",
+        privacyTitle: "プライバシー・バイ・デザイン",
+        privacyList: [
+          "映像と音声はあなたの手元に留まります。私たちが赤ちゃんの映像を見ることも保存することもありません。",
+          "既定で安全。デバイス間の接続はエンドツーエンドで暗号化されます。",
+          "コントロールはあなたに。必要なアラートを選び、デバイスのペア/解除やリセットもいつでも可能です。"
+        ],
+        whyTitle: "選ばれる理由",
+        whyList: [
+          "すでに持っているスマホやPCで使える",
+          "シンプルなペアリングで素早くセットアップ",
+          "面倒な設定なしで役立つ AI ヒント",
+          "無料"
+        ],
+        safetyTitle: "重要な安全に関する注意",
+        safetyBody: "Naptio は医療機器ではなく、いかなる症状の診断・治療・予防も行いません。保護者の見守りや専門家の助言の代替にはなりません。常に安全な睡眠ガイドラインに従ってください。",
+        teamTitle: "Naptio チーム",
+        teamBody: "私たちは、プライバシーを第一に考えた役立つツール作りを愛する少人数のチームです。Naptio 以前は非常に要求の厳しい分野で高信頼モデルを長年磨き、精度・セキュリティ・性能へのこだわりを培いました。今、そのこだわりを家庭に近い課題に活かし、家族の安らかな休息を支えます。Naptio は誰もが無料で使えるように提供し続けます。"
+      }
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function render(lang) {
+      const t = I18N[lang] || I18N.en;
+
+      // html lang/dir + body RTL class
+      document.documentElement.lang = lang;
+      document.documentElement.dir  = t.dir || "ltr";
+      document.body.classList.toggle('rtl', (t.dir === 'rtl'));
+
+      // Headings & paragraphs
+      $('t-title').textContent        = t.title;
+      $('t-intro-1').textContent      = t.intro1 || '';
+      $('t-intro-2').textContent      = t.intro2 || '';
+      $('t-how-title').textContent    = t.howTitle;
+      $('t-how-body').textContent     = t.howBody;
+      $('t-privacy-title').textContent= t.privacyTitle;
+      $('t-why-title').textContent    = t.whyTitle;
+      $('t-safety-title').textContent = t.safetyTitle;
+      $('t-safety-body').textContent  = t.safetyBody;
+      $('t-team-title').textContent   = t.teamTitle;
+      $('t-team-body').textContent    = t.teamBody;
+
+      // Lists
+      const priv = $('t-privacy-list'); priv.innerHTML = '';
+      (t.privacyList || []).forEach(x => {
+        const li = document.createElement('li'); li.textContent = x; priv.appendChild(li);
+      });
+
+      const why = $('t-why-list'); why.innerHTML = '';
+      (t.whyList || []).forEach(x => {
+        const li = document.createElement('li'); li.textContent = x; why.appendChild(li);
+      });
+    }
+
+    // Init: restore saved lang or default to English
+    const select = $('lang');
+    const saved = localStorage.getItem('naptio:about:lang');
+    if (saved && I18N[saved]) select.value = saved;
+
+    render(select.value);
+
+    // Change handler
+    select.addEventListener('change', () => {
+      const lang = select.value;
+      localStorage.setItem('naptio:about:lang', lang);
+      render(lang);
+    });
+  </script>
+
+<!-- analytics -->
+<script type="module">
+  import { installAnalytics } from '/hungryface/shared/analytics.js';
+  window.analytics = installAnalytics({ feature: 'naptio-about' });
+  // Later: window.analytics.event('about_opened');
+</script>
+  
+</body>
+</html>
