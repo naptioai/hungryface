@@ -1,519 +1,1383 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="utf-8" />
   <title>Naptio — About</title>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-  <!-- Shared sidebar stylesheet to retain site look & feel -->
+  <meta name="description" content="Naptio is a simple, privacy-first baby monitor between your own devices, with built-in smarts to surface helpful cues." />
+
+  <!-- Shared sidebar stylesheet -->
   <link rel="stylesheet" href="/hungryface/webrtc/receiver/shared/sidebar.css" />
+
   <style>
     :root { color-scheme: dark; }
     html, body {
-      margin:0; background:#000; color:#fff;
-      font-family:-apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial,
+      margin: 0; background: #000; color: #fff;
+      font-family:
+        -apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial,
         "Noto Sans", "Noto Sans Arabic", "Noto Sans Hebrew",
-        "Noto Sans SC", "Noto Sans KR", "Noto Sans JP", "Noto Sans Devanagari", sans-serif;
+        "Noto Sans SC", "Noto Sans KR", "Noto Sans JP", "Noto Sans Devanagari",
+        sans-serif;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
-    /* Allow scroll under fixed sidebar */
-    body { overflow-x:hidden; }
+    a { color: #fff; text-decoration: none; opacity: 0.95; }
+    a:hover, a:focus { text-decoration: underline; opacity: 1; }
 
-    /* Visually hidden for screen readers */
     .sr-only {
       position:absolute; width:1px; height:1px; padding:0; margin:-1px;
       overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
     }
 
-    /* Layout wrapper */
-    .wrap { min-height:100dvh; display:grid; place-items:start center; padding:16px; }
+    .wrap { box-sizing: border-box; padding: 16px; display: flex; justify-content: center; }
+    .container { width: min(100%, 1000px); }
 
-    /* Card panel style (matches other pages) */
-    .panel {
-      width:min(100%, 1000px);
-      background:#0b0b0b;
-      border:1px solid #141414;
-      border-radius:14px;
-      padding:16px;
-      margin:16px auto 24px;
-      box-shadow: 0 0 0 1px #0b0b0b inset;
+    /* Header (inline; not fixed) */
+    .page-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 4px 0 18px 0; }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .logo-link {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 10px;
+      background: #0a0a0a; border: 1px solid #1c1c1c;
     }
-
-    /* Top bar: logo left, language on the right */
-    .topbar {
-      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px;
-    }
-    .logo-link { display:inline-flex; align-items:center; line-height:1; text-decoration:none; color:#fff; opacity:.95; }
-    .logo-link:hover, .logo-link:focus { opacity:1; text-decoration:none; }
-    .icon { width: 26px; height: 26px; display:block; }
-    .icon-home { width:28px; height:28px; }
-
-    h1 { margin:.25rem 0 .5rem; font-size:22px; line-height:1.25; }
-    h2 { margin:1.25rem 0 .5rem; font-size:18px; line-height:1.3; }
-    p  { margin:.5rem 0; color:#ddd; }
-    ul { margin:.5rem 0 .75rem 1.1rem; padding:0; }
-    li { margin:.3rem 0; color:#ddd; }
-
-    .muted { color:#aaa; }
-    .fineprint { font-size:.92rem; color:#ccc; }
+    .icon { width: 22px; height: 22px; display: block; }
+    .page-title { font-size: 22px; font-weight: 700; letter-spacing: 0.2px; }
 
     /* Language selector */
-    .lang {
+    .lang-picker {
       display:flex; align-items:center; gap:8px;
-      background:#0d0d0d; border:1px solid #1a1a1a; border-radius:999px;
-      padding:6px 10px;
+      background:#0a0a0a; border:1px solid #1c1c1c; border-radius:10px; padding:6px 10px;
     }
-    .lang label { font-size:.9rem; color:#aaa; }
-    .lang select {
-      appearance:none; -webkit-appearance:none; -moz-appearance:none;
-      background:#0d0d0d; color:#fff; border:none; outline:none;
-      padding:4px 18px 4px 6px; cursor:pointer; font-size:.95rem; border-radius:10px;
+    .lang-picker label { font-size: 12px; color:#bbb; }
+    .lang-select {
+      background: transparent; color:#fff; border:none; outline:none; font-size:14px;
+      appearance:none; padding-right: 18px; cursor: pointer;
     }
-    /* Make dropdown list readable across browsers */
-    .lang option { background:#0d0d0d; color:#fff; }
-    @media (prefers-color-scheme: light) {
-      .lang select { background:#fff; color:#000; }
-      .lang option  { background:#fff; color:#000; }
+    .lang-select option { color:#000; } /* native dropdown list */
+
+    /* Panels */
+    .panel {
+      background: #0c0c0c; border: 1px solid #1c1c1c;
+      border-radius: 16px; padding: 18px; margin: 12px 0;
     }
+    .panel h2 { margin: 0 0 8px 0; font-size: 18px; font-weight: 700; }
+    .panel p { margin: 8px 0; color: #ddd; line-height: 1.55; }
+    .panel ul, .panel ol { margin: 10px 0 0 20px; color: #ddd; }
+    .muted { color: #aaa; }
 
-    .lang select:focus { outline:2px solid #2a2a2a; border-radius:8px; }
+    /* CTAs (re-using your pill look) */
+    .cta-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
+    .btn-pill {
+      display:inline-block; padding:11px 16px; border-radius:999px;
+      background:#151515; border:1px solid #2a2a2a; font-weight:600; letter-spacing:0.2px;
+    }
+    .btn-accent { background:#1a1a1a; border-color:#3a3a3a; } /* black style (not red) */
 
-    /* RTL support */
-    .rtl .panel { direction:rtl; }
-    .rtl ul { margin:.5rem 1.1rem .75rem 0; }
+    .disclaimer { margin-top: 10px; font-size: 13px; color: #bbb; }
 
-    /* Subtle separator */
-    .hr { height:1px; background:#141414; margin:12px 0; border-radius:1px; }
+    /* Multi-language content visibility */
+    .i18n { display:none; }
+    .i18n.active { display:block; }
 
-    /* Links (if any) */
-    a { color:#9ad; text-decoration:none; }
-    a:hover, a:focus { text-decoration:underline; }
-
-    /* Make headings slightly softer */
-    .soft { color:#eee; }
-
-    /* Responsive tweaks */
-    @media (max-width:520px){
-      .wrap { padding:12px; }
-      .panel { padding:14px; }
+    @media (max-width: 420px) {
+      .page-title { font-size: 20px; }
+      .btn-pill { padding: 10px 14px; }
+      .lang-picker label { display:none; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="panel">
-      <div class="topbar">
-        <!-- Logo → landing page. Matches the home page sprite/placement. -->
-        <a class="logo-link" href="https://hungryfaceai.github.io/hungryface/home/" aria-label="Home">
-          <svg class="icon icon-home" aria-hidden="true" focusable="false">
-            <use href="/hungryface/assets/icons.svg#icon-cradle-ai" xlink:href="/hungryface/assets/icons.svg#icon-cradle-ai"></use>
-          </svg>
-          <span class="sr-only">Home</span>
-        </a>
 
-        <!-- Language selector (no leading flag to avoid duplicate country icons) -->
-        <div class="lang" role="group" aria-label="Language selector">
-          <label for="lang" id="t-language-label" class="sr-only">Language</label>
-          <select id="lang" aria-labelledby="t-language-label">
-            <option value="en">🇬🇧 English</option>
-            <option value="es">🇪🇸 Español</option>
-            <option value="fr">🇫🇷 Français</option>
-            <option value="pt">🇵🇹 Português</option>
+  <div class="wrap">
+    <div class="container">
+
+      <!-- Header -->
+      <header class="page-header" role="banner">
+        <div class="header-left">
+          <!-- Logo (same markup as your other pages) -->
+          <a class="logo-link" href="https://hungryfaceai.github.io/hungryface/home/" aria-label="Home">
+            <svg class="icon icon-home" aria-hidden="true" focusable="false">
+              <use href="/hungryface/assets/icons.svg#icon-cradle-ai" xlink:href="/hungryface/assets/icons.svg#icon-cradle-ai"></use>
+            </svg>
+            <span class="sr-only">Home</span>
+          </a>
+          <div class="page-title">About Naptio</div>
+        </div>
+
+        <!-- Multilingual dropdown -->
+        <div class="lang-picker" aria-label="Language picker">
+          <label for="lang">Language</label>
+          <select id="lang" class="lang-select">
+            <!-- Existing set -->
+            <option value="en-GB">🇬🇧 English (UK)</option>
+            <option value="es-ES">🇪🇸 Español (ES)</option>
+            <option value="fr-FR">🇫🇷 Français (FR)</option>
             <option value="ar">🇸🇦 العربية</option>
-            <option value="ru">🇷🇺 Русский</option>
-            <option value="uk">🇺🇦 Українська</option>
-            <option value="he">🇮🇱 עברית</option>
-            <option value="zh">🇨🇳 中文</option>
-            <option value="ko">🇰🇷 한국어</option>
-            <option value="hi">🇮🇳 हिन्दी</option>
-            <option value="ja">🇯🇵 日本語</option>
+            <option value="ru-RU">🇷🇺 Русский</option>
+            <option value="uk-UA">🇺🇦 Українська</option>
+            <option value="he-IL">🇮🇱 עברית</option>
+            <option value="zh-CN">🇨🇳 中文 (简体)</option>
+            <option value="ja-JP">🇯🇵 日本語</option>
+            <option value="ko-KR">🇰🇷 한국어</option>
+            <option value="hi-IN">🇮🇳 हिन्दी</option>
+            <option value="pt-PT">🇵🇹 Português (PT)</option>
+
+            <!-- Additions to cover the rest of “Top-20 by total speakers” -->
+            <option value="de-DE">🇩🇪 Deutsch</option>
+            <option value="bn-BD">🇧🇩 বাংলা</option>
+            <option value="id-ID">🇮🇩 Bahasa Indonesia</option>
+            <option value="ur-PK">🇵🇰 اُردو</option>
+            <option value="vi-VN">🇻🇳 Tiếng Việt</option>
+            <option value="tr-TR">🇹🇷 Türkçe</option>
+            <option value="mr-IN">🇮🇳 मराठी</option>
+            <option value="te-IN">🇮🇳 తెలుగు</option>
+            <option value="ha-NG">🇳🇬 Hausa</option>
+            <option value="pcm-NG">🇳🇬 Nigerian Pidgin</option>
+            <option value="arz-EG">🇪🇬 العربية المصرية</option>
           </select>
         </div>
-      </div>
+      </header>
 
-      <h1 id="t-title" class="soft">About Naptio</h1>
+      <!-- ===================== ENGLISH (UK) ===================== -->
+      <article class="i18n active" data-lang="en-GB" dir="ltr">
+        <section class="panel" aria-labelledby="what-en">
+          <h2 id="what-en">What is Naptio?</h2>
+          <p>Naptio turns two devices you already own into a simple, private baby monitor.
+            One device becomes the camera near your baby; your other device is your viewer.
+            Video and audio stay between your devices, and built-in smarts help surface helpful cues
+            like cry-like sounds, movement, and face-down risk.</p>
+          <p class="muted">There’s no cloud video storage. Your family’s moments stay with you.</p>
+        </section>
 
-      <p id="t-intro-1"></p>
-      <p id="t-intro-2"></p>
+        <section class="panel" aria-labelledby="need-en">
+          <h2 id="need-en">What you need</h2>
+          <ul>
+            <li>Two devices (for example, two phones, or a phone and a laptop).</li>
+            <li>Reliable Wi-Fi or the same local network for both devices.</li>
+            <li>A safe place to set the camera device near the crib/cot, ideally with power.</li>
+            <li>Recent browsers with camera and microphone permissions allowed.</li>
+          </ul>
+        </section>
 
-      <h2 id="t-how-title"></h2>
-      <p id="t-how-body"></p>
+        <section class="panel" aria-labelledby="how-en">
+          <h2 id="how-en">How it works</h2>
+          <p>After a quick pairing, your two devices connect directly. Naptio runs on your devices and
+            can let you know about things that matter—like cry-like sounds, motion, face orientation,
+            and face-down risk. Alerts show up in the app, and you can review recent ones in the
+            built-in dashboard.</p>
+        </section>
 
-      <h2 id="t-privacy-title"></h2>
-      <ul id="t-privacy-list"></ul>
+        <section class="panel" aria-labelledby="privacy-en">
+          <h2 id="privacy-en">Privacy &amp; security</h2>
+          <p>Naptio aims to keep your family’s data on your devices. We avoid cloud video storage and keep things simple.
+            A small amount of technical information may be collected to keep the app reliable, with clear retention limits.
+            Read more in our <a href="/hungryface/legal/">Legal, Terms of Use &amp; Privacy Notice</a>.</p>
+        </section>
 
-      <h2 id="t-why-title"></h2>
-      <ul id="t-why-list"></ul>
+        <section class="panel" aria-labelledby="start-en">
+          <h2 id="start-en">Getting started in a minute</h2>
+          <ol>
+            <li>On the device near the crib, open the camera page and allow camera/mic.</li>
+            <li>On your other device, open a viewer page.</li>
+            <li>Use <em>Pair devices</em> to connect them.</li>
+          </ol>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">Pair devices</a>
+          </div>
+        </section>
 
-      <div class="hr" aria-hidden="true"></div>
+        <section class="panel" aria-labelledby="tips-en">
+          <h2 id="tips-en">Tips for a smooth setup</h2>
+          <ul>
+            <li>Keep the camera device plugged in to avoid sleep/low battery interruptions.</li>
+            <li>Allow sound if you want instant audio on the viewer (some phones require it).</li>
+            <li>Place the camera device safely—stable surface, clear view, away from the cot interior.</li>
+            <li>Visit the guide for step-by-step pairing and troubleshooting.</li>
+          </ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">User guide</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">Contact Support</a>
+          </div>
+        </section>
 
-      <h2 id="t-safety-title"></h2>
-      <p id="t-safety-body" class="fineprint"></p>
+        <section class="panel" aria-labelledby="team-en">
+          <h2 id="team-en">The Naptio team</h2>
+          <p>We’re a small team dedicated to building state-of-the-art, privacy-first tools for families.
+            We’re parents ourselves, and we care deeply about keeping Naptio friendly, trustworthy, and
+            available to everyone — for free.</p>
+          <p class="muted">Thank you for trying Naptio. If there’s something we can improve, we’d love to hear from you.</p>
+        </section>
 
-      <h2 id="t-team-title"></h2>
-      <p id="t-team-body"></p>
+        <section class="panel" aria-labelledby="safety-en">
+          <h2 id="safety-en">Safety notice</h2>
+          <p class="disclaimer">Naptio is <strong>not a medical device</strong> and is not a substitute for responsible parenting or
+            safe-sleep practices. Always follow local guidance for infant sleep safety and supervise your child.</p>
+        </section>
+      </article>
+
+      <!-- ===================== ESPAÑOL ===================== -->
+      <article class="i18n" data-lang="es-ES" dir="ltr">
+        <section class="panel"><h2>¿Qué es Naptio?</h2>
+          <p>Naptio convierte dos dispositivos que ya tienes en un vigilabebés sencillo y privado.
+            Uno actúa como cámara junto a tu bebé y el otro como visor.
+            El vídeo y el audio se mantienen entre tus dispositivos, y las funciones inteligentes ayudan a avisarte
+            de señales útiles como sonidos de llanto, movimiento y riesgo de estar boca abajo.</p>
+          <p class="muted">No hay almacenamiento de vídeo en la nube. Los momentos de tu familia se quedan contigo.</p>
+        </section>
+        <section class="panel"><h2>Lo que necesitas</h2>
+          <ul><li>Dos dispositivos (por ejemplo, dos móviles, o un móvil y un portátil).</li>
+              <li>Wi-Fi fiable o la misma red local para ambos dispositivos.</li>
+              <li>Un lugar seguro para colocar la cámara cerca de la cuna, preferiblemente con alimentación.</li>
+              <li>Navegadores recientes con permisos de cámara y micrófono.</li></ul>
+        </section>
+        <section class="panel"><h2>Cómo funciona</h2>
+          <p>Tras un emparejamiento rápido, tus dispositivos se conectan directamente. Naptio funciona en tus dispositivos
+            y puede avisarte de cosas importantes: sonidos de llanto, movimiento, orientación de la cara
+            y riesgo de estar boca abajo. Las alertas aparecen en la app y puedes revisarlas en el panel de historial.</p>
+        </section>
+        <section class="panel"><h2>Privacidad y seguridad</h2>
+          <p>Naptio procura mantener los datos de tu familia en tus dispositivos. Evitamos el almacenamiento de vídeo en la nube.
+            Podríamos recopilar una pequeña cantidad de información técnica para la fiabilidad, con límites claros de retención.
+            Más información en nuestro <a href="/hungryface/legal/">Aviso legal y de privacidad</a>.</p>
+        </section>
+        <section class="panel"><h2>Empieza en un minuto</h2>
+          <ol><li>En el dispositivo junto a la cuna, abre la página de cámara y concede permisos.</li>
+              <li>En tu otro dispositivo, abre una página de visor.</li>
+              <li>Usa <em>Emparejar dispositivos</em> para conectarlos.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">Emparejar dispositivos</a></div>
+        </section>
+        <section class="panel"><h2>Consejos para una configuración fluida</h2>
+          <ul><li>Mantén la cámara conectada a la corriente para evitar interrupciones.</li>
+              <li>Permite el sonido si quieres audio instantáneo en el visor.</li>
+              <li>Coloca la cámara de forma segura: superficie estable, buena vista, fuera del interior de la cuna.</li>
+              <li>Consulta la guía para pasos detallados y solución de problemas.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">Guía del usuario</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">Contactar soporte</a>
+          </div>
+        </section>
+        <section class="panel"><h2>El equipo de Naptio</h2>
+          <p>Somos un equipo pequeño, dedicado a crear herramientas de última generación con la privacidad por delante.
+            También somos madres y padres, y queremos que Naptio sea cercano, fiable y accesible para todos — de forma gratuita.</p>
+          <p class="muted">Gracias por probar Naptio. Si podemos mejorar algo, cuéntanoslo.</p>
+        </section>
+        <section class="panel"><h2>Aviso de seguridad</h2>
+          <p class="disclaimer">Naptio <strong>no es un dispositivo médico</strong> y no sustituye la supervisión responsable ni las prácticas de sueño seguro.</p>
+        </section>
+      </article>
+
+      <!-- ===================== FRANÇAIS ===================== -->
+      <article class="i18n" data-lang="fr-FR" dir="ltr">
+        <section class="panel"><h2>Qu’est-ce que Naptio&nbsp;?</h2>
+          <p>Naptio transforme deux appareils que vous possédez déjà en un babyphone simple et privé.
+            L’un devient la caméra près de votre bébé, l’autre votre écran.
+            La vidéo et l’audio restent entre vos appareils, et des fonctions intégrées mettent en avant les signaux utiles
+            comme les sons de pleurs, les mouvements et le risque d’être face contre le matelas.</p>
+          <p class="muted">Aucun stockage vidéo dans le cloud. Vos moments restent chez vous.</p>
+        </section>
+        <section class="panel"><h2>Ce qu’il vous faut</h2>
+          <ul><li>Deux appareils (par ex. deux téléphones, ou un téléphone et un ordinateur).</li>
+              <li>Un Wi-Fi fiable ou le même réseau local pour les deux appareils.</li>
+              <li>Un emplacement sûr pour la caméra près du lit, idéalement avec alimentation.</li>
+              <li>Des navigateurs récents avec accès caméra et micro.</li></ul>
+        </section>
+        <section class="panel"><h2>Comment ça marche</h2>
+          <p>Après un court appairage, vos deux appareils se connectent directement. Naptio fonctionne sur vos appareils
+            et peut vous prévenir de ce qui compte : sons de pleurs, mouvements, orientation du visage
+            et risque de décubitus ventral. Les alertes s’affichent dans l’app et vous pouvez les revoir dans le tableau de bord.</p>
+        </section>
+        <section class="panel"><h2>Vie privée &amp; sécurité</h2>
+          <p>Naptio vise à garder les données de votre famille sur vos appareils. Pas de stockage vidéo dans le cloud.
+            Une petite quantité d’informations techniques peut être collectée pour la fiabilité, avec des durées de conservation limitées.
+            En savoir plus : <a href="/hungryface/legal/">Mentions légales &amp; confidentialité</a>.</p>
+        </section>
+        <section class="panel"><h2>Démarrer en une minute</h2>
+          <ol><li>Sur l’appareil près du lit, ouvrez la page caméra et autorisez l’accès.</li>
+              <li>Sur l’autre appareil, ouvrez une page de visualisation.</li>
+              <li>Utilisez <em>Appairer les appareils</em> pour les connecter.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">Appairer les appareils</a></div>
+        </section>
+        <section class="panel"><h2>Conseils pour une mise en place fluide</h2>
+          <ul><li>Laissez la caméra branchée pour éviter les interruptions.</li>
+              <li>Autorisez le son pour un audio instantané sur l’écran.</li>
+              <li>Placez la caméra en sécurité : surface stable, vue dégagée, hors de l’intérieur du lit.</li>
+              <li>Consultez le guide pour les étapes détaillées et le dépannage.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">Guide utilisateur</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">Contacter l’assistance</a>
+          </div>
+        </section>
+        <section class="panel"><h2>L’équipe Naptio</h2>
+          <p>Nous sommes une petite équipe qui conçoit des outils de pointe pensés pour la vie privée.
+            Nous sommes aussi des parents, attachés à ce que Naptio reste simple, fiable et accessible à tous — gratuitement.</p>
+          <p class="muted">Merci d’avoir essayé Naptio. Dites-nous ce que nous pouvons améliorer.</p>
+        </section>
+        <section class="panel"><h2>Consignes de sécurité</h2>
+          <p class="disclaimer">Naptio <strong>n’est pas un dispositif médical</strong> et ne remplace pas une surveillance responsable ni les pratiques de sommeil sécurisé.</p>
+        </section>
+      </article>
+
+      <!-- ===================== العربية (RTL) ===================== -->
+      <article class="i18n" data-lang="ar" dir="rtl">
+        <section class="panel"><h2>ما هو Naptio؟</h2>
+          <p>يحوّل Naptio جهازين لديك بالفعل إلى جهاز مراقبة طفل بسيط وخاص.
+            يعمل أحد الجهازين ككاميرا بجانب طفلك والآخر كعارض.
+            تبقى الفيديوهات والصوت بين أجهزتك، وتساعدك الميزات الذكية على ملاحظة الإشارات المهمة
+            مثل أصوات البكاء، الحركة، وخطر الاستلقاء على الوجه.</p>
+          <p class="muted">لا يوجد تخزين للفيديو في السحابة. تبقى لحظات عائلتك معك.</p>
+        </section>
+        <section class="panel"><h2>ما الذي تحتاجه</h2>
+          <ul><li>جهازان (مثل هاتفين، أو هاتف وحاسوب محمول).</li>
+              <li>اتصال Wi-Fi موثوق أو نفس الشبكة المحلية للجهازين.</li>
+              <li>مكان آمن لوضع جهاز الكاميرا قرب السرير ويفضّل مع مصدر طاقة.</li>
+              <li>متصفحات حديثة مع السماح للكاميرا والميكروفون.</li></ul>
+        </section>
+        <section class="panel"><h2>كيف يعمل</h2>
+          <p>بعد اقتران سريع، تتصل أجهزتك مباشرة. Naptio يعمل على أجهزتك
+            ويمكنه تنبيهك إلى الأمور المهمة مثل أصوات البكاء، الحركة، اتجاه الوجه،
+            وخطر الاستلقاء على الوجه. تظهر التنبيهات داخل التطبيق ويمكنك مراجعتها في لوحة السجل.</p>
+        </section>
+        <section class="panel"><h2>الخصوصية والأمان</h2>
+          <p>يهدف Naptio إلى إبقاء بيانات عائلتك على أجهزتك. نتجنب تخزين الفيديو في السحابة ونبقي الأمور بسيطة.
+            قد نجمع قدرًا بسيطًا من المعلومات التقنية لضمان الاعتمادية، مع حدود واضحة للاحتفاظ.
+            اطّلع على المزيد في <a href="/hungryface/legal/">الشروط وإشعار الخصوصية</a>.</p>
+        </section>
+        <section class="panel"><h2>ابدأ خلال دقيقة</h2>
+          <ol><li>على الجهاز القريب من السرير، افتح صفحة الكاميرا واسمح بالوصول.</li>
+              <li>على الجهاز الآخر، افتح صفحة العارض.</li>
+              <li>استخدم <em>إقران الأجهزة</em> للتوصيل بينهما.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">إقران الأجهزة</a></div>
+        </section>
+        <section class="panel"><h2>نصائح لضبط سلس</h2>
+          <ul><li>يفضّل إبقاء جهاز الكاميرا موصولًا بالطاقة.</li>
+              <li>اسمح بالصوت إذا أردت تشغيل الصوت فورًا على العارض.</li>
+              <li>ضع الكاميرا بأمان: سطح ثابت، رؤية واضحة، بعيدًا عن داخل السرير.</li>
+              <li>راجع الدليل للإرشادات وخطوات الحل.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">دليل المستخدم</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">التواصل مع الدعم</a>
+          </div>
+        </section>
+        <section class="panel"><h2>فريق Naptio</h2>
+          <p>نحن فريق صغير ملتزم ببناء أدوات متقدمة تُراعي الخصوصية أولًا للأُسر.
+            نحن آباء وأمهات أيضًا، ونسعى لأن يبقى Naptio ودودًا وموثوقًا ومتاحًا للجميع — مجانًا.</p>
+          <p class="muted">شكرًا لتجربتك Naptio. يسعدنا سماع أي اقتراحات للتحسين.</p>
+        </section>
+        <section class="panel"><h2>تنبيه للسلامة</h2>
+          <p class="disclaimer">Naptio <strong>ليس جهازًا طبيًا</strong> ولا يُغني عن الإشراف المسؤول أو ممارسات النوم الآمن.</p>
+        </section>
+      </article>
+
+      <!-- ===================== РУССКИЙ ===================== -->
+      <article class="i18n" data-lang="ru-RU" dir="ltr">
+        <section class="panel"><h2>Что такое Naptio?</h2>
+          <p>Naptio превращает два ваших устройства в простой и приватный радионяня-сервис.
+            Одно устройство — камера рядом с малышом, другое — ваш экран.
+            Видео и звук остаются между вашими устройствами, а встроенные подсказки помогают замечать
+            плач, движение и риск положения лицом вниз.</p>
+          <p class="muted">Никакого облачного хранения видео. Семейные моменты остаются у вас.</p>
+        </section>
+        <section class="panel"><h2>Что нужно</h2>
+          <ul><li>Два устройства (например, два телефона, либо телефон и ноутбук).</li>
+              <li>Надёжный Wi-Fi или одна локальная сеть для обоих устройств.</li>
+              <li>Безопасное место для камеры рядом с кроваткой, по возможности с питанием.</li>
+              <li>Современные браузеры с разрешениями на камеру и микрофон.</li></ul>
+        </section>
+        <section class="panel"><h2>Как это работает</h2>
+          <p>После короткого сопряжения устройства соединяются напрямую. Naptio работает на ваших устройствах
+            и уведомляет о важном: плаче, движении, положении лица и риске «лицом вниз».
+            Оповещения появляются в приложении, а историю можно посмотреть в панели.</p>
+        </section>
+        <section class="panel"><h2>Конфиденциальность и безопасность</h2>
+          <p>Naptio стремится хранить данные вашей семьи на ваших устройствах. Мы избегаем облачного
+            хранения видео. Небольшой объём технической информации может собираться для надёжности, с чёткими сроками хранения.
+            Подробнее — в <a href="/hungryface/legal/">Правовой информации и Политике конфиденциальности</a>.</p>
+        </section>
+        <section class="panel"><h2>Начните за минуту</h2>
+          <ol><li>На устройстве у кроватки откройте страницу камеры и разрешите доступ.</li>
+              <li>На втором устройстве откройте страницу просмотра.</li>
+              <li>Нажмите <em>Сопрячь устройства</em>, чтобы соединить их.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">Сопрячь устройства</a></div>
+        </section>
+        <section class="panel"><h2>Советы для быстрой настройки</h2>
+          <ul><li>Держите камеру на зарядке, чтобы избежать сбоев.</li>
+              <li>Разрешите звук для мгновенного аудио на экране.</li>
+              <li>Разместите камеру безопасно: устойчивая поверхность, хороший обзор, вне внутренней части кроватки.</li>
+              <li>Смотрите руководство для подробных шагов и помощи.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">Руководство пользователя</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">Связаться с поддержкой</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Команда Naptio</h2>
+          <p>Мы — небольшая команда, создающая современные инструменты с приоритетом конфиденциальности.
+            Мы сами родители и хотим, чтобы Naptio оставался дружелюбным, надёжным и доступным всем — бесплатно.</p>
+          <p class="muted">Спасибо, что пробуете Naptio. Нам важна обратная связь.</p>
+        </section>
+        <section class="panel"><h2>Предупреждение о безопасности</h2>
+          <p class="disclaimer">Naptio — <strong>не медицинское устройство</strong> и не заменяет ответственное наблюдение и правила безопасного сна.</p>
+        </section>
+      </article>
+
+      <!-- ===================== УКРАЇНСЬКА ===================== -->
+      <article class="i18n" data-lang="uk-UA" dir="ltr">
+        <section class="panel"><h2>Що таке Naptio?</h2>
+          <p>Naptio перетворює два ваші пристрої на простий і приватний відеоняню.
+            Один стає камерою біля малюка, другий — вашим переглядачем.
+            Відео та звук залишаються між вашими пристроями, а вбудовані підказки допомагають помічати
+            звуки плачу, рух і ризик положення обличчям донизу.</p>
+          <p class="muted">Жодного хмарного зберігання відео. Родинні миті залишаються у вас.</p>
+        </section>
+        <section class="panel"><h2>Що потрібно</h2>
+          <ul><li>Два пристрої (наприклад, два телефони або телефон і ноутбук).</li>
+              <li>Надійний Wi-Fi або спільна локальна мережа для обох пристроїв.</li>
+              <li>Безпечне місце для камери біля ліжечка, бажано з живленням.</li>
+              <li>Сучасні браузери з дозволами на камеру та мікрофон.</li></ul>
+        </section>
+        <section class="panel"><h2>Як це працює</h2>
+          <p>Після швидкого сполучення пристрої з’єднуються напряму. Naptio працює на ваших пристроях
+            і може повідомляти про важливе: звуки плачу, рух, орієнтацію обличчя
+            та ризик положення обличчям донизу. Сповіщення з’являються в застосунку, історія доступна на панелі.</p>
+        </section>
+        <section class="panel"><h2>Конфіденційність і безпека</h2>
+          <p>Naptio прагне зберігати дані вашої родини на ваших пристроях. Ми уникаємо хмарного зберігання відео.
+            Можливий невеликий збір технічної інформації для надійності з чіткими строками зберігання.
+            Докладніше в <a href="/hungryface/legal/">Правилах та Політиці конфіденційності</a>.</p>
+        </section>
+        <section class="panel"><h2>Почніть за хвилину</h2>
+          <ol><li>На пристрої біля ліжечка відкрийте сторінку камери та дозвольте доступ.</li>
+              <li>На іншому пристрої відкрийте сторінку перегляду.</li>
+              <li>Скористайтеся <em>Спарити пристрої</em> для з’єднання.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">Спарити пристрої</a></div>
+        </section>
+        <section class="panel"><h2>Поради для легкої настройки</h2>
+          <ul><li>Тримайте камеру підключеною до живлення.</li>
+              <li>Дозвольте звук для миттєвого аудіо на перегляді.</li>
+              <li>Розмістіть камеру безпечно: стійка поверхня, чіткий огляд, поза ліжечком.</li>
+              <li>Перегляньте посібник для детальних кроків.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">Посібник користувача</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">Зв’язатися з підтримкою</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Команда Naptio</h2>
+          <p>Ми — невелика команда, що створює сучасні інструменти з пріоритетом приватності.
+            Ми самі батьки й прагнемо, щоб Naptio залишався дружнім, надійним і доступним для всіх — безкоштовно.</p>
+          <p class="muted">Дякуємо, що спробували Naptio. Нам важлива ваша думка.</p>
+        </section>
+        <section class="panel"><h2>Зауваження щодо безпеки</h2>
+          <p class="disclaimer">Naptio — <strong>не медичний пристрій</strong> і не замінює відповідальний нагляд чи практики безпечного сну.</p>
+        </section>
+      </article>
+
+      <!-- ===================== עברית (RTL) ===================== -->
+      <article class="i18n" data-lang="he-IL" dir="rtl">
+        <section class="panel"><h2>מה זה Naptio?</h2>
+          <p>Naptio הופך שני מכשירים שברשותכם למוניטור תינוק פשוט ופרטי.
+            מכשיר אחד הוא המצלמה ליד התינוק, והשני הוא הצג.
+            הווידאו והשמע נשארים בין המכשירים, ותכונות חכמות מסייעות לזהות
+            קולות בכי, תנועה וסיכון לשכיבה על הפנים.</p>
+          <p class="muted">אין אחסון וידאו בענן. הרגעים המשפחתיים נשארים אצלכם.</p>
+        </section>
+        <section class="panel"><h2>מה צריך</h2>
+          <ul><li>שני מכשירים (למשל שני טלפונים, או טלפון ומחשב נייד).</li>
+              <li>Wi-Fi אמין או אותה רשת מקומית לשני המכשירים.</li>
+              <li>מקום בטוח למקם בו את המצלמה ליד המיטה, רצוי עם חשמל.</li>
+              <li>דפדפנים עדכניים עם הרשאות מצלמה ומיקרופון.</li></ul>
+        </section>
+        <section class="panel"><h2>איך זה עובד</h2>
+          <p>לאחר צימוד מהיר, שני המכשירים מתחברים ישירות. Naptio פועל על המכשירים שלכם
+            ויכול להתריע על דברים חשובים — קולות בכי, תנועה, כיוון הפנים
+            וסיכון לשכיבה על הפנים. ההתראות מופיעות באפליקציה וניתן לעיין בהיסטוריה.</p>
+        </section>
+        <section class="panel"><h2>פרטיות ואבטחה</h2>
+          <p>Naptio שם דגש על שמירת הנתונים במכשירים שלכם. אין אחסון וידאו בענן.
+            יתכן איסוף מצומצם של מידע טכני לצורך אמינות, עם מגבלות שמירה ברורות.
+            פרטים נוספים ב־<a href="/hungryface/legal/">תנאי השימוש והפרטיות</a>.</p>
+        </section>
+        <section class="panel"><h2>תחילת עבודה בדקה</h2>
+          <ol><li>במכשיר שליד המיטה, פתחו את דף המצלמה ואשרו הרשאות.</li>
+              <li>במכשיר השני פתחו את דף הצפייה.</li>
+              <li>השתמשו ב־<em>צימוד מכשירים</em> כדי לחבר בין המכשירים.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">צימוד מכשירים</a></div>
+        </section>
+        <section class="panel"><h2>טיפים להגדרה חלקה</h2>
+          <ul><li>השאירו את מכשיר המצלמה מחובר לחשמל.</li>
+              <li>אפשרו שמע לקבלת אודיו מיידי.</li>
+              <li>מקמו את המצלמה בבטחה: משטח יציב, שדה ראייה ברור, מחוץ לפנים העריסה.</li>
+              <li>ראו את המדריך עבור שלבים מפורטים.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">מדריך למשתמש</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">צור קשר עם התמיכה</a>
+          </div>
+        </section>
+        <section class="panel"><h2>צוות Naptio</h2>
+          <p>אנחנו צוות קטן שמפתח כלים מתקדמים עם פרטיות קודמת לכל.
+            כהורים בעצמנו, חשוב לנו ש-Naptio יהיה ידידותי, אמין ונגיש לכולם — בחינם.</p>
+          <p class="muted">תודה שניסיתם את Naptio. נשמח לכל הצעה לשיפור.</p>
+        </section>
+        <section class="panel"><h2>הערת בטיחות</h2>
+          <p class="disclaimer">Naptio <strong>אינו מכשיר רפואי</strong> ואינו מחליף השגחה אחראית או הנחיות שינה בטוחה.</p>
+        </section>
+      </article>
+
+      <!-- ===================== 中文（简体） ===================== -->
+      <article class="i18n" data-lang="zh-CN" dir="ltr">
+        <section class="panel"><h2>Naptio 是什么？</h2>
+          <p>Naptio 可将你已有的两台设备变成简单且注重隐私的婴儿监护工具。
+            一台设备作为宝宝旁边的相机，另一台作为观看端。
+            影音仅在你的设备之间传输，内置的智能提示会帮助识别
+            类似哭声、移动以及俯卧风险等信号。</p>
+          <p class="muted">不进行云端视频存储。家人的时刻只属于你。</p>
+        </section>
+        <section class="panel"><h2>你需要准备</h2>
+          <ul><li>两台设备（如两部手机，或手机 + 电脑）。</li>
+              <li>可靠的 Wi-Fi 或让两台设备处于同一局域网。</li>
+              <li>在婴儿床旁为相机设备找到安全的位置，最好接通电源。</li>
+              <li>较新的浏览器并允许相机与麦克风权限。</li></ul>
+        </section>
+        <section class="panel"><h2>工作方式</h2>
+          <p>快速配对后，两台设备直接连接。Naptio 在你的设备上运行，
+            可提示你关注重要事项：类似哭声、动作、面部朝向及俯卧风险。
+            警报会在应用中显示，你也可以在内置面板里查看最近的记录。</p>
+        </section>
+        <section class="panel"><h2>隐私与安全</h2>
+          <p>Naptio 旨在将家庭数据保留在你的设备上。我们避免云端视频存储并保持简单。
+            为了可靠性，可能会收集极少量的技术信息，并设有明确的保留期限。
+            详情见 <a href="/hungryface/legal/">法律与隐私说明</a>。</p>
+        </section>
+        <section class="panel"><h2>一分钟上手</h2>
+          <ol><li>在婴儿床旁的设备上打开相机页面并授权。</li>
+              <li>在另一台设备上打开观看页面。</li>
+              <li>使用<em>配对设备</em>完成连接。</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">配对设备</a></div>
+        </section>
+        <section class="panel"><h2>顺利设置的小贴士</h2>
+          <ul><li>尽量保持相机设备接通电源。</li>
+              <li>如需即时音频，请在观看端允许声音播放。</li>
+              <li>确保相机设备放置稳固、视野清晰，并远离床内。</li>
+              <li>查看用户指南获取更详细步骤。</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">用户指南</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">联系支持</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Naptio 团队</h2>
+          <p>我们是一支小而专注的团队，致力于为家庭打造先进且以隐私为先的工具。
+            我们也是父母，希望 Naptio 友好、可信，并且对所有人免费开放。</p>
+          <p class="muted">感谢使用 Naptio，欢迎提出改进建议。</p>
+        </section>
+        <section class="panel"><h2>安全提示</h2>
+          <p class="disclaimer">Naptio <strong>并非医疗器械</strong>，不能替代看护与安全睡眠规范。</p>
+        </section>
+      </article>
+
+      <!-- ===================== 日本語 ===================== -->
+      <article class="i18n" data-lang="ja-JP" dir="ltr">
+        <section class="panel"><h2>Naptio とは？</h2>
+          <p>Naptio は、手元にある 2 台のデバイスを、シンプルでプライベートなベビーモニターにします。
+            1 台がカメラ、もう 1 台がビューアになります。
+            映像と音声はあなたのデバイス間にとどまり、内蔵のスマート機能が
+            泣き声らしき音、動き、うつ伏せのリスクなどを知らせます。</p>
+          <p class="muted">クラウドへの動画保存は行いません。ご家族の瞬間はあなたのもとに。</p>
+        </section>
+        <section class="panel"><h2>必要なもの</h2>
+          <ul><li>2 台のデバイス（例：スマホ 2 台、またはスマホ + パソコン）。</li>
+              <li>信頼できる Wi-Fi または同一のローカルネットワーク。</li>
+              <li>ベビーベッド付近で安全に設置できる場所（できれば電源に接続）。</li>
+              <li>最新のブラウザと、カメラ・マイクの許可。</li></ul>
+        </section>
+        <section class="panel"><h2>仕組み</h2>
+          <p>かんたんなペアリング後、2 台のデバイスが直接つながります。Naptio はデバイス上で動作し、
+            泣き声のような音、動き、顔の向き、うつ伏せのリスクなどをお知らせ。
+            通知はアプリに表示され、履歴は内蔵パネルで確認できます。</p>
+        </section>
+        <section class="panel"><h2>プライバシーとセキュリティ</h2>
+          <p>Naptio は、ご家族のデータをデバイス内に保つことを目指しています。動画のクラウド保存はしません。
+            信頼性のために最小限の技術情報を収集する場合があります（保管期間は明確です）。
+            詳細は <a href="/hungryface/legal/">法的情報およびプライバシー通知</a> をご覧ください。</p>
+        </section>
+        <section class="panel"><h2>1 分でスタート</h2>
+          <ol><li>ベビーベッド側のデバイスでカメラページを開き、許可を与える。</li>
+              <li>もう一方のデバイスでビューアページを開く。</li>
+              <li><em>デバイスをペアリング</em> して接続する。</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">デバイスをペアリング</a></div>
+        </section>
+        <section class="panel"><h2>スムーズな設定のコツ</h2>
+          <ul><li>カメラ側のデバイスは電源に接続しておく。</li>
+              <li>ビューア側で音声の再生を許可する。</li>
+              <li>安定した場所に安全に設置し、視界を確保。ベッド内には置かない。</li>
+              <li>詳しい手順はユーザーガイドへ。</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">ユーザーガイド</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">サポートに連絡</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Naptio チーム</h2>
+          <p>私たちは小さなチームですが、プライバシーを最優先にした先進的なツールづくりに取り組んでいます。
+            同時に親でもあり、Naptio を親しみやすく、信頼でき、誰もが無料で使える存在にしたいと考えています。</p>
+          <p class="muted">ご意見・ご感想をお待ちしています。</p>
+        </section>
+        <section class="panel"><h2>安全に関する注意</h2>
+          <p class="disclaimer">Naptio は<strong>医療機器ではありません</strong>。保護者の見守りや安全な睡眠の実践を代替するものではありません。</p>
+        </section>
+      </article>
+
+      <!-- ===================== 한국어 ===================== -->
+      <article class="i18n" data-lang="ko-KR" dir="ltr">
+        <section class="panel"><h2>Naptio란?</h2>
+          <p>Naptio는 이미 가지고 있는 두 기기를 간단하고 프라이버시를 중시하는 베이비 모니터로 만들어 줍니다.
+            한 기기는 아기 곁의 카메라가 되고, 다른 기기는 화면이 됩니다.
+            영상과 소리는 기기 사이에서만 전달되며, 내장된 기능이 울음소리, 움직임, 엎드림 위험 등을 알려줍니다.</p>
+          <p class="muted">클라우드 영상 저장은 없습니다. 가족의 순간은 여러분 곁에 남습니다.</p>
+        </section>
+        <section class="panel"><h2>필요한 것</h2>
+          <ul><li>두 기기(예: 스마트폰 2대 또는 스마트폰 + 노트북).</li>
+              <li>신뢰할 수 있는 Wi-Fi 또는 동일한 로컬 네트워크.</li>
+              <li>카메라 기기를 침대 근처의 안전한 장소에 두세요(가능하면 전원 연결).</li>
+              <li>최신 브라우저와 카메라/마이크 권한.</li></ul>
+        </section>
+        <section class="panel"><h2>작동 방식</h2>
+          <p>간단한 페어링 후, 두 기기가 직접 연결됩니다. Naptio는 기기에서 실행되며,
+            울음소리, 움직임, 얼굴 방향, 엎드림 위험 등을 알려줍니다.
+            알림은 앱에 표시되고, 기록은 내장 대시보드에서 확인할 수 있습니다.</p>
+        </section>
+        <section class="panel"><h2>개인정보 보호 및 보안</h2>
+          <p>Naptio는 가족의 데이터를 기기에 보관하는 것을 목표로 합니다. 클라우드 영상 저장을 피합니다.
+            안정성을 위해 최소한의 기술 정보를 수집할 수 있으며, 보관 기간은 명확합니다.
+            자세한 내용은 <a href="/hungryface/legal/">법적 고지 및 개인정보 처리방침</a>을 참조하세요.</p>
+        </section>
+        <section class="panel"><h2>1분 만에 시작</h2>
+          <ol><li>침대 근처 기기에서 카메라 페이지를 열고 권한을 허용합니다.</li>
+              <li>다른 기기에서 뷰어 페이지를 엽니다.</li>
+              <li><em>기기 연결(페어링)</em>을 사용해 연결합니다.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">기기 연결</a></div>
+        </section>
+        <section class="panel"><h2>원활한 설정을 위한 팁</h2>
+          <ul><li>카메라 기기는 전원에 연결해 두세요.</li>
+              <li>즉시 오디오를 원하면 뷰어에서 소리 재생을 허용하세요.</li>
+              <li>카메라는 안정적이고 안전한 위치에 두고, 침대 안쪽은 피하세요.</li>
+              <li>자세한 단계는 사용자 가이드를 확인하세요.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">사용자 가이드</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">지원 문의</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Naptio 팀</h2>
+          <p>우리는 작은 팀이지만, 가족을 위한 최신 프라이버시-우선 도구를 만드는데 헌신하고 있습니다.
+            우리 또한 부모이며, Naptio가 친근하고 신뢰할 수 있으며 모두가 무료로 사용할 수 있기를 바랍니다.</p>
+          <p class="muted">Naptio를 사용해 주셔서 감사합니다. 개선할 점이 있다면 알려주세요.</p>
+        </section>
+        <section class="panel"><h2>안전 안내</h2>
+          <p class="disclaimer">Naptio는 <strong>의료기기</strong>가 아니며, 보호자 감독이나 안전한 수면 수칙을 대체하지 않습니다.</p>
+        </section>
+      </article>
+
+      <!-- ===================== हिन्दी ===================== -->
+      <article class="i18n" data-lang="hi-IN" dir="ltr">
+        <section class="panel"><h2>Naptio क्या है?</h2>
+          <p>Naptio आपके दो उपकरणों को एक सरल और निजी बेबी मॉनीटर में बदल देता है।
+            एक उपकरण बच्चे के पास कैमरा बनता है और दूसरा आपका व्यूअर।
+            वीडियो और ऑडियो आपके उपकरणों के बीच ही रहते हैं, और अंतर्निहित स्मार्ट सुविधाएँ
+            रोने जैसी ध्वनियों, हलचल और उल्टे लेटने के जोखिम जैसी बातों का संकेत देती हैं।</p>
+          <p class="muted">क्लाउड वीडियो स्टोरेज नहीं होता। आपके पारिवारिक पल आपके पास ही रहते हैं。</p>
+        </section>
+        <section class="panel"><h2>क्या चाहिए</h2>
+          <ul><li>दो उपकरण (जैसे दो फोन, या फोन + लैपटॉप)。</li>
+              <li>विश्वसनीय Wi-Fi या दोनों उपकरणों के लिए एक ही लोकल नेटवर्क。</li>
+              <li>कैमरा उपकरण के लिए पालने के पास सुरक्षित स्थान, बेहतर होगा कि बिजली से जुड़ा हो。</li>
+              <li>नए ब्राउज़र और कैमरा/माइक की अनुमति。</li></ul>
+        </section>
+        <section class="panel"><h2>यह कैसे काम करता है</h2>
+          <p>तेज़ पेयरिंग के बाद दोनों उपकरण सीधे जुड़ जाते हैं。 Naptio आपके उपकरणों पर चलता है
+            और रोने जैसी ध्वनियाँ, मूवमेंट, चेहरे की दिशा और उल्टे लेटने के जोखिम जैसी बातों के बारे में बताता है。
+            अलर्ट ऐप में दिखाई देते हैं और इतिहास पैनल में देखे जा सकते हैं。</p>
+        </section>
+        <section class="panel"><h2>गोपनीयता और सुरक्षा</h2>
+          <p>Naptio का उद्देश्य आपके परिवार का डेटा आपके उपकरणों पर ही रखना है。 हम क्लाउड वीडियो स्टोरेज से बचते हैं。
+            विश्वसनीयता के लिए थोड़ी तकनीकी जानकारी एकत्र हो सकती है, जिसकी अवधि स्पष्ट रूप से सीमित है।
+            और पढ़ें: <a href="/hungryface/legal/">कानूनी जानकारी और गोपनीयता नोटिस</a>。</p>
+        </section>
+        <section class="panel"><h2>एक मिनट में शुरुआत करें</h2>
+          <ol><li>पालने के पास वाले उपकरण पर कैमरा पेज खोलें और अनुमति दें。</li>
+              <li>दूसरे उपकरण पर व्यूअर पेज खोलें。</li>
+              <li><em>डिवाइस पेयर</em> का उपयोग करके कनेक्ट करें。</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">डिवाइस पेयर करें</a></div>
+        </section>
+        <section class="panel"><h2>सुचारू सेटअप के सुझाव</h2>
+          <ul><li>कैमरा उपकरण को बिजली से जोड़े रखें。</li>
+              <li>तुरंत ऑडियो के लिए ध्वनि की अनुमति दें。</li>
+              <li>कैमरा सुरक्षित और स्थिर जगह पर रखें, पालने के अंदर नहीं。</li>
+              <li>विस्तृत चरणों के लिए उपयोगकर्ता गाइड देखें。</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">उपयोगकर्ता गाइड</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">सपोर्ट से संपर्क करें</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Naptio टीम</h2>
+          <p>हम एक छोटा सा दल हैं जो परिवारों के लिए अत्याधुनिक, गोपनीयता-प्रथम टूल बनाता है।
+            हम स्वयं भी माता-पिता हैं और चाहते हैं कि Naptio दोस्ताना, भरोसेमंद और सबके लिए — मुफ्त — उपलब्ध रहे。</p>
+          <p class="muted">Naptio आज़माने के लिए धन्यवाद। कोई सुझाव हो तो बताएँ。</p>
+        </section>
+        <section class="panel"><h2>सुरक्षा सूचना</h2>
+          <p class="disclaimer">Naptio <strong>कोई चिकित्सीय उपकरण नहीं</strong> है और यह जिम्मेदार देखभाल या सुरक्षित नींद के अभ्यास का विकल्प नहीं है。</p>
+        </section>
+      </article>
+
+      <!-- ===================== PORTUGUÊS (PT) ===================== -->
+      <article class="i18n" data-lang="pt-PT" dir="ltr">
+        <section class="panel"><h2>O que é o Naptio?</h2>
+          <p>O Naptio transforma dois dispositivos que já tem num bebé-monitor simples e privado.
+            Um torna-se a câmara junto do bebé e o outro o visor.
+            O vídeo e o áudio ficam entre os seus dispositivos, e as funcionalidades inteligentes ajudam a detetar
+            sons de choro, movimento e risco de estar de barriga para baixo.</p>
+          <p class="muted">Sem armazenamento de vídeo na cloud. Os momentos da sua família ficam consigo.</p>
+        </section>
+        <section class="panel"><h2>O que precisa</h2>
+          <ul><li>Dois dispositivos (por exemplo, dois telemóveis, ou telemóvel + portátil).</li>
+              <li>Wi-Fi fiável ou a mesma rede local para ambos os dispositivos.</li>
+              <li>Um local seguro para a câmara junto ao berço, de preferência com alimentação.</li>
+              <li>Navegadores recentes com permissões de câmara e microfone.</li></ul>
+        </section>
+        <section class="panel"><h2>Como funciona</h2>
+          <p>Após um emparelhamento rápido, os dois dispositivos ligam-se diretamente. O Naptio funciona nos seus dispositivos
+            e pode alertar para o que interessa: sons de choro, movimento, orientação do rosto
+            e risco de barriga para baixo. As alertas aparecem na aplicação e podem ser revistos no painel.</p>
+        </section>
+        <section class="panel"><h2>Privacidade e segurança</h2>
+          <p>O Naptio procura manter os dados da sua família nos seus dispositivos. Evitamos guardar vídeo na cloud.
+            Poderemos recolher uma pequena quantidade de informação técnica para garantir fiabilidade, com prazos de retenção claros.
+            Saiba mais no nosso <a href="/hungryface/legal/">Aviso Legal e de Privacidade</a>.</p>
+        </section>
+        <section class="panel"><h2>Começar em um minuto</h2>
+          <ol><li>No dispositivo junto ao berço, abra a página da câmara e permita o acesso.</li>
+              <li>No outro dispositivo, abra a página do visor.</li>
+              <li>Use <em>Emparelhar dispositivos</em> para os ligar.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">Emparelhar dispositivos</a></div>
+        </section>
+        <section class="panel"><h2>Dicas para uma configuração sem falhas</h2>
+          <ul><li>Mantenha a câmara ligada à corrente.</li>
+              <li>Permita o som para ouvir o áudio de imediato no visor.</li>
+              <li>Coloque a câmara numa superfície estável e com boa visibilidade; fora do interior do berço.</li>
+              <li>Consulte o guia para instruções passo a passo.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">Guia do utilizador</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">Contactar suporte</a>
+          </div>
+        </section>
+        <section class="panel"><h2>A equipa Naptio</h2>
+          <p>Somos uma pequena equipa dedicada a criar ferramentas de última geração, com a privacidade em primeiro lugar.
+            Também somos pais e queremos que o Naptio seja amigável, de confiança e acessível a todos — gratuitamente.</p>
+          <p class="muted">Obrigado por experimentar o Naptio. Diga-nos como podemos melhorar.</p>
+        </section>
+        <section class="panel"><h2>Nota de segurança</h2>
+          <p class="disclaimer">O Naptio <strong>não é um dispositivo médico</strong> e não substitui a supervisão responsável nem as práticas de sono seguro.</p>
+        </section>
+      </article>
+
+      <!-- ===================== DEUTSCH ===================== -->
+      <article class="i18n" data-lang="de-DE" dir="ltr">
+        <section class="panel"><h2>Was ist Naptio?</h2>
+          <p>Naptio macht aus zwei Geräten, die Sie bereits besitzen, ein einfaches und privates Babyfon.
+            Ein Gerät wird zur Kamera in der Nähe Ihres Babys, das andere ist Ihr Display.
+            Video und Audio bleiben zwischen Ihren Geräten. Eingebaute Funktionen heben Hinweise wie
+            weinähnliche Geräusche, Bewegung und das Risiko der Bauchlage hervor.</p>
+          <p class="muted">Keine Videospeicherung in der Cloud. Ihre Familienmomente bleiben bei Ihnen.</p>
+        </section>
+        <section class="panel"><h2>Was Sie brauchen</h2>
+          <ul><li>Zwei Geräte (z. B. zwei Telefone oder Telefon + Laptop).</li>
+              <li>Zuverlässiges WLAN oder dasselbe lokale Netzwerk.</li>
+              <li>Einen sicheren Platz für die Kamera am Bett, idealerweise mit Stromversorgung.</li>
+              <li>Aktuelle Browser mit Kamera- und Mikrofonfreigaben.</li></ul>
+        </section>
+        <section class="panel"><h2>So funktioniert es</h2>
+          <p>Nach einem kurzen Koppeln verbinden sich die Geräte direkt. Naptio läuft auf Ihren Geräten
+            und informiert Sie über Wichtiges – weinähnliche Geräusche, Bewegung, Gesichtsorientierung
+            und Risiko der Bauchlage. Hinweise erscheinen in der App; die Historie ist im Dashboard einsehbar.</p>
+        </section>
+        <section class="panel"><h2>Datenschutz &amp; Sicherheit</h2>
+          <p>Naptio möchte die Daten Ihrer Familie auf Ihren Geräten halten. Keine Cloud-Videospeicherung.
+            Für die Zuverlässigkeit können geringe technische Daten erhoben werden – mit klaren Fristen.
+            Mehr unter <a href="/hungryface/legal/">Rechtliches &amp; Datenschutz</a>.</p>
+        </section>
+        <section class="panel"><h2>In einer Minute starten</h2>
+          <ol><li>Öffnen Sie am Bett die Kameraseite und erlauben Sie Kamera/Mikro.</li>
+              <li>Öffnen Sie am zweiten Gerät eine Anzeigeseite.</li>
+              <li>Nutzen Sie <em>Geräte koppeln</em>, um zu verbinden.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">Geräte koppeln</a></div>
+        </section>
+        <section class="panel"><h2>Tipps für eine reibungslose Einrichtung</h2>
+          <ul><li>Lassen Sie die Kamera am Strom.</li>
+              <li>Audiowiedergabe erlauben, wenn Ton sofort hörbar sein soll.</li>
+              <li>Kamera sicher platzieren: stabil, klare Sicht, nicht im Bett.</li>
+              <li>Schritte &amp; Hilfe im Benutzerhandbuch.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">Benutzerhandbuch</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">Support kontaktieren</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Das Naptio-Team</h2>
+          <p>Wir sind ein kleines Team, das moderne, datenschutzfreundliche Werkzeuge für Familien baut.
+            Wir sind selbst Eltern und möchten Naptio freundlich, verlässlich und für alle kostenlos halten.</p>
+          <p class="muted">Danke fürs Ausprobieren. Feedback ist willkommen.</p>
+        </section>
+        <section class="panel"><h2>Sicherheitshinweis</h2>
+          <p class="disclaimer">Naptio ist <strong>kein Medizinprodukt</strong> und ersetzt keine Aufsicht oder sichere Schlafpraktiken.</p>
+        </section>
+      </article>
+
+      <!-- ===================== বাংলা ===================== -->
+      <article class="i18n" data-lang="bn-BD" dir="ltr">
+        <section class="panel"><h2>Naptio কী?</h2>
+          <p>Naptio আপনার দুটি ডিভাইসকে একটি সহজ, ব্যক্তিগত বেবি মনিটরে পরিণত করে।
+            একটি ডিভাইস শিশুর পাশে ক্যামেরা হিসেবে থাকে, অন্যটি আপনার ভিউয়ার।
+            ভিডিও ও অডিও কেবল আপনার ডিভাইসগুলোর মাঝেই থাকে, আর অন্তর্নির্মিত সুবিধা
+            কান্নার মতো শব্দ, নড়াচড়া এবং উল্টো হয়ে শোয়ার ঝুঁকি ইত্যাদি বোঝাতে সাহায্য করে।</p>
+          <p class="muted">ক্লাউডে ভিডিও সংরক্ষণ নেই। পরিবারের মুহূর্তগুলো আপনার কাছেই থাকে।</p>
+        </section>
+        <section class="panel"><h2>যা লাগবে</h2>
+          <ul><li>দুটি ডিভাইস (যেমন দুইটি ফোন, অথবা ফোন + ল্যাপটপ)।</li>
+              <li>বিশ্বস্ত ওয়াই-ফাই বা একই লোকাল নেটওয়ার্ক।</li>
+              <li>বিছানার পাশে ক্যামেরা ডিভাইস রাখার নিরাপদ জায়গা, সম্ভব হলে বিদ্যুৎ সংযোগ।</li>
+              <li>হালনাগাদ ব্রাউজার এবং ক্যামেরা/মাইক্রোফোনের অনুমতি।</li></ul>
+        </section>
+        <section class="panel"><h2>কিভাবে কাজ করে</h2>
+          <p>দ্রুত পেয়ার করার পর ডিভাইস দুটি সরাসরি যুক্ত হয়। Naptio আপনার ডিভাইসেই চলে
+            এবং কান্নার মতো শব্দ, নড়াচড়া, মুখের দিক-নির্দেশ ও উল্টো শোয়ার ঝুঁকি সম্পর্কে জানায়।
+            সতর্কতাগুলো অ্যাপে দেখা যায় এবং ইতিহাস প্যানেলে পর্যালোচনা করা যায়।</p>
+        </section>
+        <section class="panel"><h2>গোপনীয়তা ও নিরাপত্তা</h2>
+          <p>Naptio আপনার পরিবারের ডেটা আপনার ডিভাইসেই রাখার চেষ্টা করে। আমরা ক্লাউড ভিডিও এড়িয়ে চলি।
+            নির্ভরযোগ্যতার জন্য অল্প কিছু প্রযুক্তিগত তথ্য সীমিত সময়ের জন্য সংরক্ষিত হতে পারে।
+            বিস্তারিত দেখুন <a href="/hungryface/legal/">আইনগত তথ্য ও গোপনীয়তা</a>।</p>
+        </section>
+        <section class="panel"><h2>এক মিনিটে শুরু</h2>
+          <ol><li>বিছানার পাশে থাকা ডিভাইসে ক্যামেরা পেজ খুলে অনুমতি দিন।</li>
+              <li>অন্য ডিভাইসে ভিউয়ার পেজ খুলুন।</li>
+              <li><em>ডিভাইস পেয়ার</em> করে যুক্ত করুন।</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">ডিভাইস পেয়ার করুন</a></div>
+        </section>
+        <section class="panel"><h2>সহজ সেটআপের টিপস</h2>
+          <ul><li>ক্যামেরা ডিভাইসটি চার্জে/বিদ্যুতে রাখুন।</li>
+              <li>ভিউয়ারে তাৎক্ষণিক অডিও চাইলে সাউন্ড অনুমতি দিন।</li>
+              <li>ক্যামেরা নিরাপদ জায়গায় রাখুন: স্থির, পরিষ্কার দৃশ্য, খাটের ভিতরে নয়।</li>
+              <li>ধাপে ধাপে নির্দেশনার জন্য ইউজার গাইড দেখুন।</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">ইউজার গাইড</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">সহায়তা নিন</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Naptio টিম</h2>
+          <p>আমরা একটি ছোট দল—গোপনীয়তাকে সামনে রেখে পরিবারের জন্য আধুনিক টুল তৈরিতে নিবেদিত।
+            আমরাও বাবা-মা; তাই Naptio-কে আন্তরিক, বিশ্বস্ত ও সবার জন্য—বিনামূল্যে—রাখতেই চাই।</p>
+          <p class="muted">Naptio ব্যবহার করার জন্য ধন্যবাদ। উন্নতির প্রস্তাব জানাতে দ্বিধা করবেন না।</p>
+        </section>
+        <section class="panel"><h2>নিরাপত্তা নোটিশ</h2>
+          <p class="disclaimer">Naptio <strong>একটি চিকিৎসা-সরঞ্জাম নয়</strong>; এটি দায়িত্বশীল তত্ত্বাবধান বা নিরাপদ ঘুমের বিকল্প নয়।</p>
+        </section>
+      </article>
+
+      <!-- ===================== BAHASA INDONESIA ===================== -->
+      <article class="i18n" data-lang="id-ID" dir="ltr">
+        <section class="panel"><h2>Apa itu Naptio?</h2>
+          <p>Naptio mengubah dua perangkat yang sudah Anda miliki menjadi baby monitor yang sederhana dan privat.
+            Satu perangkat menjadi kamera di dekat bayi, satu lagi menjadi penampil.
+            Video dan audio tetap di antara perangkat Anda, dan fitur bawaan membantu menyoroti
+            isyarat seperti suara mirip tangisan, gerakan, dan risiko tengkurap.</p>
+          <p class="muted">Tidak ada penyimpanan video di cloud. Momen keluarga tetap milik Anda.</p>
+        </section>
+        <section class="panel"><h2>Yang dibutuhkan</h2>
+          <ul><li>Dua perangkat (mis. dua ponsel, atau ponsel + laptop).</li>
+              <li>Wi-Fi andal atau jaringan lokal yang sama.</li>
+              <li>Tempat aman untuk perangkat kamera di dekat boks, sebaiknya terhubung listrik.</li>
+              <li>Browser terbaru dengan izin kamera dan mikrofon.</li></ul>
+        </section>
+        <section class="panel"><h2>Cara kerja</h2>
+          <p>Setelah dipasangkan sebentar, kedua perangkat terhubung langsung. Naptio berjalan di perangkat Anda
+            dan memberi tahu hal-hal penting: suara mirip tangisan, gerakan, arah wajah,
+            dan risiko tengkurap. Peringatan muncul di aplikasi dan riwayatnya dapat dilihat di panel.</p>
+        </section>
+        <section class="panel"><h2>Privasi &amp; keamanan</h2>
+          <p>Naptio bertujuan menjaga data keluarga Anda tetap berada di perangkat Anda. Kami menghindari penyimpanan video di cloud.
+            Sejumlah kecil informasi teknis dapat dikumpulkan untuk keandalan, dengan batas penyimpanan yang jelas.
+            Baca selengkapnya di <a href="/hungryface/legal/">Informasi Hukum &amp; Privasi</a>.</p>
+        </section>
+        <section class="panel"><h2>Mulai dalam satu menit</h2>
+          <ol><li>Di perangkat dekat boks, buka halaman kamera dan beri izin.</li>
+              <li>Di perangkat lain, buka halaman penampil.</li>
+              <li>Gunakan <em>Pemasangan perangkat</em> untuk menghubungkan.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">Pasangkan perangkat</a></div>
+        </section>
+        <section class="panel"><h2>Tips penyiapan lancar</h2>
+          <ul><li>Jaga perangkat kamera tetap tersambung listrik.</li>
+              <li>Izinkan suara untuk audio instan di penampil.</li>
+              <li>Tempatkan kamera pada permukaan stabil, bidang pandang jelas, di luar bagian dalam boks.</li>
+              <li>Lihat panduan untuk langkah detail dan bantuan.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">Panduan pengguna</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">Hubungi dukungan</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Tim Naptio</h2>
+          <p>Kami tim kecil yang berfokus pada pembuatan alat canggih dengan privasi sebagai prioritas.
+            Kami juga orang tua, dan ingin Naptio tetap ramah, tepercaya, dan gratis untuk semua.</p>
+          <p class="muted">Terima kasih telah mencoba Naptio. Masukan Anda sangat berarti.</p>
+        </section>
+        <section class="panel"><h2>Pemberitahuan keselamatan</h2>
+          <p class="disclaimer">Naptio <strong>bukan perangkat medis</strong> dan tidak menggantikan pengawasan orang tua atau praktik tidur aman.</p>
+        </section>
+      </article>
+
+      <!-- ===================== اُردو (RTL) ===================== -->
+      <article class="i18n" data-lang="ur-PK" dir="rtl">
+        <section class="panel"><h2>Naptio کیا ہے؟</h2>
+          <p>Naptio آپ کے دو موجودہ ڈیوائسز کو ایک سادہ اور نجی بیبی مانیٹر میں بدل دیتا ہے۔
+            ایک ڈیوائس بچے کے پاس کیمرہ بنتا ہے، دوسرا آپ کا ویور۔
+            ویڈیو اور آڈیو آپ کے ڈیوائسز کے درمیان ہی رہتے ہیں، اور بلٹ اِن فیچرز
+            رونے جیسی آواز، حرکت، اور الٹے منہ لیٹنے کے خطرے جیسے اشاروں پر توجہ دلاتے ہیں۔</p>
+          <p class="muted">کلاؤڈ میں ویڈیو اسٹوریج نہیں۔ خاندان کے لمحات آپ ہی کے پاس رہتے ہیں۔</p>
+        </section>
+        <section class="panel"><h2>کیا درکار ہے</h2>
+          <ul><li>دو ڈیوائسز (مثلاً دو فون یا فون + لیپ ٹاپ).</li>
+              <li>قابلِ اعتماد وائی فائی یا دونوں کے لیے ایک ہی لوکل نیٹ ورک۔</li>
+              <li>پنگھوڑے/کٹ کے قریب کیمرہ ڈیوائس رکھنے کی محفوظ جگہ، بہتر ہو کہ بجلی سے منسلک ہو۔</li>
+              <li>جدید براؤزرز اور کیمرہ/مائیک کی اجازتیں۔</li></ul>
+        </section>
+        <section class="panel"><h2>یہ کیسے کام کرتا ہے</h2>
+          <p>تیز جوڑ کے بعد دونوں ڈیوائسز براہِ راست جڑتے ہیں۔ Naptio آپ کے ڈیوائسز پر چلتا ہے
+            اور اہم باتوں سے آگاہ کرتا ہے — رونے جیسی آوازیں، حرکت، چہرے کی سمت
+            اور الٹے منہ لیٹنے کا خطرہ۔ الرٹس ایپ میں ظاہر ہوتے ہیں اور ریکارڈ دیکھی جا سکتی ہے۔</p>
+        </section>
+        <section class="panel"><h2>پرائیویسی اور سیکیورٹی</h2>
+          <p>Naptio کا مقصد آپ کے خاندان کا ڈیٹا آپ ہی کے ڈیوائسز پر رکھنا ہے۔ ہم کلاؤڈ ویڈیو اسٹوریج سے گریز کرتے ہیں۔
+            قابلِ اعتماد رہنے کے لیے کچھ تکنیکی معلومات محدود مدت کے لیے جمع ہو سکتی ہیں۔
+            مزید پڑھیے: <a href="/hungryface/legal/">قانونی معلومات اور پرائیویسی نوٹس</a>۔</p>
+        </section>
+        <section class="panel"><h2>ایک منٹ میں آغاز</h2>
+          <ol><li>بچے کے پاس والے ڈیوائس پر کیمرہ پیج کھولیں اور اجازت دیں۔</li>
+              <li>دوسرے ڈیوائس پر ویور پیج کھولیں۔</li>
+              <li><em>Pair devices</em> سے کنیکٹ کریں۔</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">ڈیوائسز جوڑیے</a></div>
+        </section>
+        <section class="panel"><h2>آسان سیٹ اپ کے مشورے</h2>
+          <ul><li>کیمرہ ڈیوائس کو بجلی سے منسلک رکھیں۔</li>
+              <li>اگر فوری آڈیو چاہیے تو آواز کی اجازت دیں۔</li>
+              <li>کیمرہ محفوظ جگہ پر رکھیں: مضبوط سطح، صاف منظر، بستر کے اندر نہیں۔</li>
+              <li>تفصیلی مراحل کے لیے یوزر گائیڈ دیکھیں۔</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">یوزر گائیڈ</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">سپورٹ سے رابطہ</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Naptio ٹیم</h2>
+          <p>ہم ایک چھوٹی ٹیم ہیں جو خاندانوں کے لیے جدید اور پرائیویسی-فرسٹ ٹولز بناتی ہے۔
+            ہم خود بھی والدین ہیں اور چاہتے ہیں کہ Naptio دوستانہ، قابلِ اعتماد اور سب کے لیے—مفت—دستیاب رہے۔</p>
+          <p class="muted">Naptio آزمانے کا شکریہ۔ آپ کی رائے ہمارے لیے اہم ہے۔</p>
+        </section>
+        <section class="panel"><h2>حفاظتی نوٹس</h2>
+          <p class="disclaimer">Naptio <strong>طبی آلہ نہیں</strong> ہے اور ذمہ دار نگرانی یا محفوظ نیند کے اصولوں کا متبادل نہیں۔</p>
+        </section>
+      </article>
+
+      <!-- ===================== TIẾNG VIỆT ===================== -->
+      <article class="i18n" data-lang="vi-VN" dir="ltr">
+        <section class="panel"><h2>Naptio là gì?</h2>
+          <p>Naptio biến hai thiết bị bạn đang có thành một máy theo dõi em bé đơn giản và riêng tư.
+            Một thiết bị làm camera gần em bé; thiết bị còn lại là màn hình xem.
+            Video và âm thanh chỉ ở giữa các thiết bị của bạn, và tính năng thông minh giúp nhận biết
+            âm thanh giống tiếng khóc, chuyển động và rủi ro nằm sấp.</p>
+          <p class="muted">Không lưu video lên đám mây. Khoảnh khắc của gia đình thuộc về bạn.</p>
+        </section>
+        <section class="panel"><h2>Bạn cần gì</h2>
+          <ul><li>Hai thiết bị (ví dụ: hai điện thoại, hoặc điện thoại + máy tính xách tay).</li>
+              <li>Wi-Fi ổn định hoặc cùng một mạng nội bộ.</li>
+              <li>Vị trí an toàn đặt thiết bị camera gần cũi, tốt nhất có nguồn điện.</li>
+              <li>Trình duyệt mới và cho phép camera/âm thanh.</li></ul>
+        </section>
+        <section class="panel"><h2>Cách hoạt động</h2>
+          <p>Sau bước ghép nối nhanh, hai thiết bị kết nối trực tiếp. Naptio chạy trên thiết bị của bạn
+            và thông báo những điều quan trọng: âm thanh giống tiếng khóc, chuyển động, hướng khuôn mặt
+            và rủi ro nằm sấp. Cảnh báo hiển thị trong ứng dụng và có bảng lịch sử.</p>
+        </section>
+        <section class="panel"><h2>Quyền riêng tư &amp; bảo mật</h2>
+          <p>Mục tiêu của Naptio là giữ dữ liệu gia đình trên chính thiết bị của bạn. Không lưu video đám mây.
+            Có thể thu thập một lượng nhỏ thông tin kỹ thuật để đảm bảo độ tin cậy, với thời hạn rõ ràng.
+            Xem thêm tại <a href="/hungryface/legal/">Điều khoản &amp; Quyền riêng tư</a>.</p>
+        </section>
+        <section class="panel"><h2>Bắt đầu trong một phút</h2>
+          <ol><li>Trên thiết bị gần cũi, mở trang camera và cấp quyền.</li>
+              <li>Trên thiết bị còn lại, mở trang xem.</li>
+              <li>Dùng <em>Ghép thiết bị</em> để kết nối.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">Ghép thiết bị</a></div>
+        </section>
+        <section class="panel"><h2>Mẹo thiết lập suôn sẻ</h2>
+          <ul><li>Giữ thiết bị camera được cắm điện.</li>
+              <li>Cho phép âm thanh nếu muốn nghe ngay trên thiết bị xem.</li>
+              <li>Đặt camera chắc chắn, tầm nhìn rõ, không đặt trong lòng cũi.</li>
+              <li>Xem hướng dẫn để biết các bước chi tiết.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">Hướng dẫn sử dụng</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">Liên hệ hỗ trợ</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Đội ngũ Naptio</h2>
+          <p>Chúng tôi là một nhóm nhỏ, tận tâm xây dựng các công cụ hiện đại đặt quyền riêng tư lên hàng đầu cho gia đình.
+            Chúng tôi cũng là cha mẹ và mong Naptio luôn thân thiện, đáng tin cậy và miễn phí cho mọi người.</p>
+          <p class="muted">Cảm ơn bạn đã dùng Naptio. Rất mong nhận được góp ý của bạn.</p>
+        </section>
+        <section class="panel"><h2>Lưu ý an toàn</h2>
+          <p class="disclaimer">Naptio <strong>không phải thiết bị y tế</strong> và không thay thế việc trông nom hay thực hành ngủ an toàn.</p>
+        </section>
+      </article>
+
+      <!-- ===================== TÜRKÇE ===================== -->
+      <article class="i18n" data-lang="tr-TR" dir="ltr">
+        <section class="panel"><h2>Naptio nedir?</h2>
+          <p>Naptio, zaten sahip olduğunuz iki cihazı basit ve özel bir bebek telsizine dönüştürür.
+            Cihazlardan biri bebeğin yanında kamera olur; diğeri görüntüleyicinizdir.
+            Video ve ses yalnızca cihazlarınız arasında kalır; yerleşik özellikler ağlama benzeri sesler,
+            hareket ve yüzüstü yatma riskini öne çıkarır.</p>
+          <p class="muted">Bulutta video depolama yok. Ailenizin anları sizde kalır.</p>
+        </section>
+        <section class="panel"><h2>Gerekenler</h2>
+          <ul><li>İki cihaz (ör. iki telefon veya telefon + dizüstü).</li>
+              <li>Güvenilir Wi-Fi veya aynı yerel ağ.</li>
+              <li>Beşiğin yanında kamera için güvenli bir yer, mümkünse güç bağlantısı.</li>
+              <li>Güncel tarayıcılar ve kamera/mikrofon izinleri.</li></ul>
+        </section>
+        <section class="panel"><h2>Nasıl çalışır</h2>
+          <p>Kısa bir eşleştirmeden sonra iki cihaz doğrudan bağlanır. Naptio cihazlarınızda çalışır
+            ve önemli durumlar hakkında haber verir — ağlama benzeri sesler, hareket, yüz yönelimi
+            ve yüzüstü yatma riski. Uyarılar uygulamada görünür; geçmişi panelden görebilirsiniz.</p>
+        </section>
+        <section class="panel"><h2>Gizlilik ve güvenlik</h2>
+          <p>Naptio, ailenizin verilerini cihazlarınızda tutmayı hedefler. Bulutta video depolamaktan kaçınırız.
+            Güvenilirlik için az miktarda teknik bilgi tutulabilir; saklama süreleri açıktır.
+            Ayrıntılar için <a href="/hungryface/legal/">Hukuki Bilgiler ve Gizlilik</a> kısmına bakın.</p>
+        </section>
+        <section class="panel"><h2>Bir dakikada başlayın</h2>
+          <ol><li>Beşik yanındaki cihazda kamera sayfasını açın ve izin verin.</li>
+              <li>Diğer cihazda görüntüleyici sayfasını açın.</li>
+              <li><em>Cihazları eşleştir</em> ile bağlayın.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">Cihazları eşleştir</a></div>
+        </section>
+        <section class="panel"><h2>Kolay kurulum için ipuçları</h2>
+          <ul><li>Kamera cihazını prizde tutun.</li>
+              <li>Anında ses için ses çalmaya izin verin.</li>
+              <li>Kamerayı güvenli ve sabit bir yere koyun; beşiğin içine koymayın.</li>
+              <li>Adım adım yardım için kılavuza bakın.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">Kullanıcı kılavuzu</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">Destek ile iletişim</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Naptio ekibi</h2>
+          <p>Küçük bir ekibiz; aileler için gizliliği önceleyen, ileri seviye araçlar geliştiriyoruz.
+            Biz de ebeveyniz; Naptio’nun samimi, güvenilir ve herkes için ücretsiz kalmasını istiyoruz.</p>
+          <p class="muted">Naptio’yu denediğiniz için teşekkürler. Geri bildiriminize açığız.</p>
+        </section>
+        <section class="panel"><h2>Güvenlik notu</h2>
+          <p class="disclaimer">Naptio bir <strong>tıbbi cihaz değildir</strong>; sorumlu gözetimi ve güvenli uyku uygulamalarını yerine geçemez.</p>
+        </section>
+      </article>
+
+      <!-- ===================== मराठी (Marathi) ===================== -->
+      <article class="i18n" data-lang="mr-IN" dir="ltr">
+        <section class="panel"><h2>Naptio म्हणजे काय?</h2>
+          <p>Naptio तुमच्याकडे असलेल्या दोन उपकरणांना एक साधा, खाजगी बेबी मॉनिटर बनवते.
+            एक उपकरण बाळाजवळ कॅमेरा होते; दुसरे तुमचे व्ह्यूअर. व्हिडिओ आणि ऑडिओ फक्त
+            तुमच्या उपकरणांमध्येच राहतात, आणि अंगभूत मदत करणारे संकेत रडण्यासारखे आवाज,
+            हालचाल, आणि उलटं झोपण्याचा धोका ओळखायला मदत करतात.</p>
+          <p class="muted">क्लाउड व्हिडिओ स्टोरेज नाही. तुमचे कौटुंबिक क्षण तुमच्याकडेच राहतात.</p>
+        </section>
+        <section class="panel"><h2>काय लागेल</h2>
+          <ul><li>दोन उपकरणे (उदा., दोन फोन किंवा फोन + लॅपटॉप).</li>
+              <li>दोन्ही उपकरणांसाठी विश्वसनीय Wi-Fi किंवा तीच स्थानिक नेटवर्क.</li>
+              <li>पाळण्याजवळ कॅमेरा ठेवण्यासाठी सुरक्षित जागा, शक्यतो वीजजोडणीसह.</li>
+              <li>नवीन ब्राउझर्स आणि कॅमेरा/माईक परवानग्या.</li></ul>
+        </section>
+        <section class="panel"><h2>कसे चालते</h2>
+          <p>थोडक्यात पेअरिंग केल्यावर तुमची उपकरणे थेट जोडली जातात. Naptio तुमच्या उपकरणांवर चालते
+            आणि महत्त्वाच्या गोष्टी कळवते — रडण्यासारखे आवाज, हालचाल, चेहर्‍याची दिशा
+            आणि उलटं (पोटावर) झोपण्याचा धोका. अॅपमध्ये अलर्ट दिसतात; इतिहास पॅनेलमध्ये पाहता येतो.</p>
+        </section>
+        <section class="panel"><h2>गोपनीयता आणि सुरक्षा</h2>
+          <p>Naptio तुमच्या कुटुंबाचा डेटा तुमच्या उपकरणांवरच ठेवण्याचा प्रयत्न करते. आम्ही क्लाउड व्हिडिओ टाळतो.
+            विश्वसनीयतेसाठी थोडी तांत्रिक माहिती मर्यादित कालावधीसाठी जतन होऊ शकते.
+            अधिक माहितीसाठी <a href="/hungryface/legal/">कायदेशीर व गोपनीयता नोटीस</a> पाहा.</p>
+        </section>
+        <section class="panel"><h2>एका मिनिटात सुरू करा</h2>
+          <ol><li>पाळण्याजवळच्या उपकरणावर कॅमेरा पेज उघडा आणि परवानगी द्या.</li>
+              <li>दुसऱ्या उपकरणावर व्ह्यूअर पेज उघडा.</li>
+              <li><em>Pair devices</em> वापरून जोडा.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">डिव्हाइस पेअर करा</a></div>
+        </section>
+        <section class="panel"><h2>सुलभ सेटअपसाठी टिप्स</h2>
+          <ul><li>कॅमेरा उपकरण वीजेला जोडून ठेवा.</li>
+              <li>व्ह्यूअरवर त्वरित ऑडिओ हवा असल्यास ध्वनीला परवानगी द्या.</li>
+              <li>कॅमेरा सुरक्षित, स्थिर जागी ठेवा; पाळण्याच्या आत नाही.</li>
+              <li>तपशीलवार पायऱ्यांसाठी मार्गदर्शक पाहा.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">वापरकर्ता मार्गदर्शक</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">समर्थनाशी संपर्क करा</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Naptio टीम</h2>
+          <p>आम्ही एक छोटी टीम — कुटुंबांसाठी गोपनीयतेला प्राधान्य देणारी आधुनिक साधने बनवण्यास समर्पित.
+            आम्ही स्वतःही पालक आहोत; Naptio मैत्रीपूर्ण, विश्वासार्ह आणि सर्वांसाठी — विनामूल्य — ठेवण्याचा आमचा प्रयत्न आहे.</p>
+          <p class="muted">Naptio वापरल्याबद्दल धन्यवाद. सुधारणा सुचवायला मोकळे रहा.</p>
+        </section>
+        <section class="panel"><h2>सुरक्षा सूचना</h2>
+          <p class="disclaimer">Naptio <strong>वैद्यकीय उपकरण नाही</strong> आणि जबाबदार देखरेख किंवा सुरक्षित झोप पद्धतींचा पर्याय नाही.</p>
+        </section>
+      </article>
+
+      <!-- ===================== తెలుగు (Telugu) ===================== -->
+      <article class="i18n" data-lang="te-IN" dir="ltr">
+        <section class="panel"><h2>Naptio అంటే ఏమిటి?</h2>
+          <p>Naptio మీ దగ్గర已有 ఉన్న రెండు పరికరాలను సింపుల్‌, ప్రైవేట్ బేబీ మానిటర్‌గా మారుస్తుంది.
+            ఒకటి బిడ్డ పక్కన కెమెరాగా, మరొకటి వీయర్‌గా పనిచేస్తుంది. వీడియో, ఆడియో మీ పరికరాల మధ్యే
+            ఉంటాయి; అంతర్లీన సదుపాయాలు రోదనలాంటి శబ్దాలు, కదలిక, మరియు బొజ్జపై పడుకునే ప్రమాదాన్ని గుర్తించడంలో సహాయపడుతాయి.</p>
+          <p class="muted">క్లౌడ్ వీడియో స్టోరేజ్ లేదు. మీ కుటుంబ క్షణాలు మీ వద్దే ఉంటాయి.</p>
+        </section>
+        <section class="panel"><h2>ఏవి అవసరం</h2>
+          <ul><li>రెండు పరికరాలు (ఉదా., రెండు ఫోన్లు లేదా ఫోన్ + ల్యాప్‌టాప్).</li>
+              <li>నమ్మకమైన Wi-Fi లేదా రెండు పరికరాలకీ ఒకే లోకల్ నెట్‌వర్క్.</li>
+              <li>పాలనా పక్కన కెమెరా పరికరం పెట్టేందుకు సురక్షిత స్థలం, వీలైతే పవర్‌తో.</li>
+              <li>ఇటీవలి బ్రౌజర్లు, కెమెరా/మైక్ అనుమతులతో.</li></ul>
+        </section>
+        <section class="panel"><h2>ఇది ఎలా పనిచేస్తుంది</h2>
+          <p>తేలికపాటి జతచేయడం తర్వాత రెండు పరికరాలు నేరుగా కలుస్తాయి. Naptio మీ పరికరాలపైనే నడుస్తుంది
+            మరియు రోదనలాంటి శబ్దాలు, కదలిక, ముఖ దిశ, బొజ్జపై పడుకునే ప్రమాదం వంటి విషయాలపై తెలుపుతుంది.
+            అలర్ట్లు యాప్‌లో కనిపిస్తాయి; చరిత్ర ప్యానెల్‌లో చూడవచ్చు.</p>
+        </section>
+        <section class="panel"><h2>గోప్యత &amp; భద్రత</h2>
+          <p>Naptio మీ కుటుంబ డేటా మీ పరికరాలపైనే ఉంచాలని లక్ష్యంగా పెట్టుకుంది. మేము క్లౌడ్ వీడియో నిల్వను నివారిస్తాము.
+            నమ్మకమైన పనితనానికి కొద్దిపాటి సాంకేతిక సమాచారం పరిమిత కాలం వరకు నిల్వ కావచ్చు.
+            మరిన్ని వివరాలకు <a href="/hungryface/legal/">లీగల్ &amp; ప్రైవసీ నోటీస్</a> చూడండి.</p>
+        </section>
+        <section class="panel"><h2>ఒక్క నిమిషంలో ప్రారంభించండి</h2>
+          <ol><li>పాలనా పక్కన ఉన్న పరికరంలో కెమెరా పేజీని తెరిచి అనుమతులు ఇవ్వండి.</li>
+              <li>మరొక పరికరంలో వీయర్ పేజీని తెరవండి.</li>
+              <li><em>Pair devices</em> ఉపయోగించి జతచేయండి.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">డివైసులను జత చేయండి</a></div>
+        </section>
+        <section class="panel"><h2>సులభ సెటప్ కోసం సూచనలు</h2>
+          <ul><li>కెమెరా పరికరాన్ని పవర్‌కు అనుసంధానం చేసి ఉంచండి.</li>
+              <li>వీయర్‌లో వెంటనే ఆúdio కావాలంటే సౌండ్ అనుమతించండి.</li>
+              <li>కెమెరాను స్థిరమైన, సురక్షిత స్థానంలో ఉంచండి; పాలనా లోపల కాదు.</li>
+              <li>వివరమైన దశల కోసం యూజర్ గైడ్ చూడండి.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">వినియోగదారు గైడ్</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">సపోర్ట్‌ను సంప్రదించండి</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Naptio బృందం</h2>
+          <p>మేము చిన్న బృందం — కుటుంబాల కోసం గోప్యతకు ప్రాధాన్యమిచ్చే ఆధునిక టూల్స్ రూపొందించడంలో నిబద్ధతతో ఉన్నాం.
+            మేము కూడా తల్లిదండ్రులమే; Naptio స్నేహపూర్వకంగా, నమ్మదగినదిగా, అందరికీ — ఉచితంగా — ఉండాలని కోరుకుంటాం.</p>
+          <p class="muted">Naptio ప్రయత్నించినందుకు ధన్యవాదాలు. మీ సూచనలు మాకు ముఖ్యం.</p>
+        </section>
+        <section class="panel"><h2>భద్రత గమనిక</h2>
+          <p class="disclaimer">Naptio <strong>వైద్య పరికరం కాదు</strong>; బాధ్యతాయుత పర్యవేక్షణ లేదా సురక్షిత నిద్ర పద్ధతులకు ప్రత్యామ్నాయం కాదు.</p>
+        </section>
+      </article>
+
+      <!-- ===================== Hausa (ha-NG) ===================== -->
+      <article class="i18n" data-lang="ha-NG" dir="ltr">
+        <section class="panel"><h2>Menene Naptio?</h2>
+          <p>Naptio yana mayar da na’urori biyu da kake da su zuwa na’urar sa ido ga jariri mai sauƙi kuma mai ƙima ga sirri.
+            Ɗaya na’ura tana zama kyamara kusa da jariri; ɗayar ita ce mai kallo.
+            Bidiyo da sauti suna tsakanin na’urorinka kaɗai, kuma fasalulluka na cikin gida suna taimakawa gano
+            sautin kuka, motsi, da haɗarin kwanciya rubda-ciki.</p>
+          <p class="muted">Babu ajiya na bidiyo a “cloud”. Lokutan iyalinka suna nan tare da kai.</p>
+        </section>
+        <section class="panel"><h2>Abubuwan da ake bukata</h2>
+          <ul><li>Na’urori biyu (misali, wayoyi biyu ko waya + kwamfutar tafi-da-gidanka).</li>
+              <li>Wi-Fi mai kyau ko wannan hanyar sadarwar gida ɗaya.</li>
+              <li>Wuri mai aminci don kyamara a gefen gadon jariri, da wutar lantarki idan zai yiwu.</li>
+              <li>Masu lilo na zamani tare da izinin kyamara/makirufo.</li></ul>
+        </section>
+        <section class="panel"><h2>Yadda yake aiki</h2>
+          <p>Bayan saurin haɗa su, na’urorin suna haɗuwa kai tsaye. Naptio yana aiki a kan na’urorinka
+            kuma yana sanar da muhimman al’amura — kamar sautin kuka, motsi, yanayin fuska,
+            da haɗarin kwanciya rubda-ciki. Faɗakarwa suna bayyana a cikin app, ana duba tarihin su a faifan baya.</p>
+        </section>
+        <section class="panel"><h2>Sirri &amp; Tsaro</h2>
+          <p>Manufar Naptio ita ce ajiye bayanan iyalinka a kan na’urorinku. Ba mu adana bidiyo a “cloud”.
+            Don ingantacciyar aiki ana iya tattara ƙananan bayanan fasaha na ɗan lokaci.
+            Ƙarin bayani: <a href="/hungryface/legal/">Sharuɗɗa &amp; Sanarwar Sirri</a>.</p>
+        </section>
+        <section class="panel"><h2>Fara cikin minti guda</h2>
+          <ol><li>A na’urar kusa da jariri, buɗe shafin kyamara ka ba da izini.</li>
+              <li>A ɗayar na’urar, buɗe shafin mai kallo.</li>
+              <li>Yi amfani da <em>Pair devices</em> don haɗa su.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">Haɗa na’urori</a></div>
+        </section>
+        <section class="panel"><h2>Shawarwari don sauƙaƙen saitawa</h2>
+          <ul><li>Riƙe na’urar kyamara a jona da wuta.</li>
+              <li>Ba da izinin sauti idan kana son jin sauti nan take.</li>
+              <li>Sanya kyamara a wuri mai tsaro kuma mai karko; ba a cikin gadon jariri ba.</li>
+              <li>Duba jagorar mai amfani don matakai dalla-dalla.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">Jagorar mai amfani</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">Tuntuɓi Tallafi</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Ƙungiyar Naptio</h2>
+          <p>Mu ƙananan ƙungiya ce da ta sadaukar da kai wajen gina kayan aiki na zamani tare da fifita sirri.
+            Mu ma iyaye ne; muna son Naptio ya kasance mai sauƙi, abin dogaro, kuma a samu kyauta ga kowa.</p>
+          <p class="muted">Nagode da gwada Naptio. Muna maraba da shawarwarinka.</p>
+        </section>
+        <section class="panel"><h2>Sanarwar Tsaro</h2>
+          <p class="disclaimer">Naptio <strong>ba na’urar likita ba ce</strong> kuma ba ta maye gurbin kulawa ko ka’idojin bacci cikin tsaro ba.</p>
+        </section>
+      </article>
+
+      <!-- ===================== Nigerian Pidgin (pcm-NG) ===================== -->
+      <article class="i18n" data-lang="pcm-NG" dir="ltr">
+        <section class="panel"><h2>Wetin be Naptio?</h2>
+          <p>Naptio turn two devices wey you get already into simple, private baby monitor.
+            One go be camera wey near your pikin; di oda one na your viewer.
+            Video and audio dey only between your devices, and small smart features fit show
+            signs like cry-cry sound, movement, and risk to lie face-down.</p>
+          <p class="muted">No cloud video storage. Your family moments remain with you.</p>
+        </section>
+        <section class="="panel"><h2>Wetins you need</h2>
+          <ul><li>Two devices (e.g., two phones or phone + laptop).</li>
+              <li>Better Wi-Fi or di same local network for both.</li>
+              <li>Safe place put camera device near cot/crib, if fit, with power.</li>
+              <li>New browsers wey get camera/mic permission.</li></ul>
+        </section>
+        <section class="panel"><h2>How e take work</h2>
+          <p>After quick pairing, di two devices connect direct. Naptio dey run for your devices
+            and e go alert you about beta things — cry-cry sound, movement, face position,
+            and face-down risk. Alerts go show inside app; you fit check history for dashboard.</p>
+        </section>
+        <section class="panel"><h2>Privacy &amp; Sekurity</h2>
+          <p>Naptio wan make your family data remain for your devices. We no dey store video for cloud.
+            To make am stable, we fit collect small technical info for short time.
+            Read more for <a href="/hungryface/legal/">Legal &amp; Privacy Notice</a>.</p>
+        </section>
+        <section class="panel"><h2>Start for one minute</h2>
+          <ol><li>For device wey near cot, open camera page and allow permission.</li>
+              <li>For di oda device, open viewer page.</li>
+              <li>Use <em>Pair devices</em> to connect dem.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">Join di devices</a></div>
+        </section>
+        <section class="panel"><h2>Tips wey go make setup easy</h2>
+          <ul><li>Keep camera device for power make e no sleep/off.</li>
+              <li>Allow sound if you want quick audio for viewer.</li>
+              <li>Put camera for stable, safe place; no put am inside cot.</li>
+              <li>Check user guide for full steps.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">User guide</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">Contact Support</a>
+          </div>
+        </section>
+        <section class="panel"><h2>Naptio team</h2>
+          <p>We be small team wey dey build better tools wey put privacy first for families.
+            We be parents too, and we wan make Naptio friendly, wey pesin fit trust, and free for everybody.</p>
+          <p class="muted">Thanks for trying Naptio. Your feedback go help us improve am.</p>
+        </section>
+        <section class="panel"><h2>Safety notice</h2>
+          <p class="disclaimer">Naptio <strong>no be medical device</strong> and e no fit replace responsible care or safe-sleep practices.</p>
+        </section>
+      </article>
+
+      <!-- ===================== العربية المصرية (Egyptian Arabic, RTL) ===================== -->
+      <article class="i18n" data-lang="arz-EG" dir="rtl">
+        <section class="panel"><h2>Naptio يعني إيه؟</h2>
+          <p>Naptio بيحوّل جهازين عندك لمونيتور أطفال بسيط وخاص.
+            جهاز يبقى الكاميرا جنب البيبي، والتاني هوّ العرض.
+            الفيديو والصوت بيفضلوا بين أجهزتك بس، والميزات المدمجة بتساعدك تلاحظ
+            أصوات شبه البكا، الحركة، وخطر النوم على الوِش.</p>
+          <p class="muted">مافيش تخزين فيديو على السحابة. لحظات عيلتك تفضل عندك.</p>
+        </section>
+        <section class="panel"><h2>محتاج إيه</h2>
+          <ul><li>جهازين (مثلاً موبايلين، أو موبايل ولابتوب).</li>
+              <li>Wi-Fi كويس أو نفس الشبكة المحلية للجهازين.</li>
+              <li>مكان آمن تحط فيه جهاز الكاميرا جنب السرير، ويفضّل مع كهربا.</li>
+              <li>متصفحات حديثة مع سماح للكاميرا والمايك.</li></ul>
+        </section>
+        <section class="panel"><h2>بيشتغل إزاي</h2>
+          <p>بعد اقتران سريع، الجهازين بيتوصلوا على طول. Naptio بيشتغل على أجهزتك
+            وبيعرفك بالحاجات المهمة — أصوات شبه البكا، الحركة، اتجاه الوِش،
+            وخطر النوم على الوِش. التنبيهات بتظهر في التطبيق، وتقدر تراجع التاريخ في اللوحة.</p>
+        </section>
+        <section class="panel"><h2>الخصوصية والأمان</h2>
+          <p>هدف Naptio إن بيانات عيلتك تفضل على أجهزتك. ما بنخزنش الفيديو على السحابة.
+            ممكن نجمع شوية معلومات تقنية عشان الاعتمادية، وده بوقت احتفاظ واضح.
+            اعرف أكتر في <a href="/hungryface/legal/">الشروط وإشعار الخصوصية</a>.</p>
+        </section>
+        <section class="panel"><h2>ابدأ في دقيقة</h2>
+          <ol><li>على الجهاز اللي جنب السرير، افتح صفحة الكاميرا واسمح بالأذونات.</li>
+              <li>على الجهاز التاني، افتح صفحة العرض.</li>
+              <li>استخدم <em>Pair devices</em> علشان توصّلهم.</li></ol>
+          <div class="cta-row"><a class="btn-pill btn-accent" href="/hungryface/webrtc/pairpsk/">اقرن الأجهزة</a></div>
+        </section>
+        <section class="panel"><h2>نصايح لتجهيز سهل</h2>
+          <ul><li>سيب جهاز الكاميرا على الكهربا عشان ما يفصلش.</li>
+              <li>اسمح بالصوت لو عايز تسمع فوراً على جهاز العرض.</li>
+              <li>حط الكاميرا في مكان ثابت وآمن وبعيد عن جوّه السرير.</li>
+              <li>شوف الدليل لخطوات تفصيلية وحلول المشاكل.</li></ul>
+          <div class="cta-row">
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/help/">دليل المستخدم</a>
+            <a class="btn-pill btn-accent" href="/hungryface/webrtc/receiver/support/">اتواصل مع الدعم</a>
+          </div>
+        </section>
+        <section class="panel"><h2>فريق Naptio</h2>
+          <p>إحنا فريق صغير، مركزين على أدوات حديثة الخصوصية فيها أولاً للعيلة.
+            وإحنا كمان آباء وأمهات، وعايزين Naptio يفضل ودود، موثوق، ومتاح للجميع — مجاناً.</p>
+          <p class="muted">شكراً إنك جرّبت Naptio. يهمنا نسمع اقتراحاتك.</p>
+        </section>
+        <section class="panel"><h2>تنبيه للسلامة</h2>
+          <p class="disclaimer">Naptio <strong>مش جهاز طبي</strong> ومش بديل عن المتابعة المسؤولة أو قواعد النوم الآمن.</p>
+        </section>
+      </article>
+
     </div>
   </div>
 
-  <script type="module">
-    // Simple i18n for the About page. Persists selection and handles RTL.
-    const I18N = {
-      en: {
-        name: "English", dir: "ltr",
-        title: "About Naptio",
-        intro1: "Naptio is a private, on-device baby monitor that runs right in your browser. Pop a spare phone in the nursery as the camera and check in from any other phone or laptop—no accounts, no subscriptions, no ads.",
-        intro2: "",
-        howTitle: "How it works",
-        howBody: "Naptio securely connects your own devices and uses gentle, on-device AI to help you notice the moments that matter—like crying, bigger movements, or sleep-position cues. Because everything runs locally, nothing is uploaded to the cloud and there’s no app to install.",
-        privacyTitle: "Privacy by design",
-        privacyList: [
-          "Your video and audio stay with you. We never see or store your baby’s footage.",
-          "Secure by default. Connections between your devices are end-to-end encrypted.",
-          "You’re in control. Pick the alerts you want, pair/unpair devices, or reset any time."
-        ],
-        whyTitle: "Why parents like it",
-        whyList: [
-          "Works with the phones and laptops you already have",
-          "Quick setup with a simple pairing flow",
-          "Helpful AI cues without complicated settings",
-          "Free to use"
-        ],
-        safetyTitle: "Important safety note",
-        safetyBody: "Naptio is not a medical device and doesn’t diagnose, treat, or prevent any condition. It’s a helper, not a substitute for parental supervision or professional advice. Always follow safe-sleep guidance.",
-        teamTitle: "The Naptio team",
-        teamBody: "We’re a small, hands-on team who love building useful, privacy-first tools. Before Naptio, we spent years crafting high-reliability models in a very demanding industry—work that taught us to obsess over accuracy, security, and performance. Now we’re bringing that same care to something closer to home: helping families rest a little easier. And we’re committed to keeping Naptio available to everyone, for free."
-      },
-      es: {
-        name: "Español", dir: "ltr",
-        title: "Acerca de Naptio",
-        intro1: "Naptio es un vigilabebés privado que funciona en tu propio dispositivo y directamente en el navegador. Coloca un teléfono de repuesto en la habitación como cámara y vigila desde otro teléfono u ordenador—sin cuentas, sin suscripciones, sin anuncios.",
-        intro2: "",
-        howTitle: "Cómo funciona",
-        howBody: "Naptio conecta de forma segura tus propios dispositivos y usa una IA ligera, en el propio dispositivo, para ayudarte a detectar los momentos importantes—como el llanto, movimientos grandes o señales de postura al dormir. Como todo funciona de forma local, no se sube nada a la nube y no hay que instalar ninguna app.",
-        privacyTitle: "Privacidad por diseño",
-        privacyList: [
-          "Tu vídeo y audio se quedan contigo. Nunca vemos ni guardamos las imágenes de tu bebé.",
-          "Seguro por defecto. Las conexiones entre tus dispositivos están cifradas de extremo a extremo.",
-          "Tú tienes el control. Elige las alertas que quieres, empareja/desempareja dispositivos o restablece cuando quieras."
-        ],
-        whyTitle: "Por qué les gusta a los padres",
-        whyList: [
-          "Funciona con los teléfonos y ordenadores que ya tienes",
-          "Configuración rápida con un emparejamiento sencillo",
-          "Indicaciones útiles de IA sin ajustes complicados",
-          "Gratis"
-        ],
-        safetyTitle: "Aviso importante de seguridad",
-        safetyBody: "Naptio no es un dispositivo médico y no diagnostica, trata ni previene ninguna afección. Es una ayuda, no un sustituto de la supervisión de los padres ni del consejo profesional. Sigue siempre las recomendaciones de sueño seguro.",
-        teamTitle: "El equipo de Naptio",
-        teamBody: "Somos un equipo pequeño y cercano al producto; nos encanta crear herramientas útiles y con la privacidad como prioridad. Antes de Naptio, pasamos años desarrollando modelos de alta fiabilidad en un sector muy exigente—un trabajo que nos enseñó a obsesionarnos con la precisión, la seguridad y el rendimiento. Ahora ponemos ese mismo cuidado en algo más cercano: ayudar a las familias a descansar un poco mejor. Y nos comprometemos a mantener Naptio disponible para todos, gratis."
-      },
-      fr: {
-        name: "Français", dir: "ltr",
-        title: "À propos de Naptio",
-        intro1: "Naptio est un babyphone privé, sur votre appareil, qui fonctionne directement dans votre navigateur. Posez un téléphone de rechange dans la chambre comme caméra et surveillez depuis un autre téléphone ou un ordinateur — sans compte, sans abonnement, sans publicité.",
-        intro2: "",
-        howTitle: "Comment ça marche",
-        howBody: "Naptio connecte en toute sécurité vos propres appareils et utilise une IA légère, exécutée localement, pour vous aider à remarquer les moments qui comptent — pleurs, grands mouvements ou indices de position de sommeil. Comme tout fonctionne en local, rien n’est envoyé dans le cloud et il n’y a aucune application à installer.",
-        privacyTitle: "Confidentialité dès la conception",
-        privacyList: [
-          "Vos vidéos et sons restent chez vous. Nous ne voyons ni ne stockons jamais les images de votre bébé.",
-          "Sécurisé par défaut. Les connexions entre vos appareils sont chiffrées de bout en bout.",
-          "Vous gardez la main. Choisissez les alertes, associez/dissociez des appareils ou réinitialisez à tout moment."
-        ],
-        whyTitle: "Pourquoi les parents l’aiment",
-        whyList: [
-          "Fonctionne avec les téléphones et ordinateurs que vous avez déjà",
-          "Mise en route rapide avec un appairage simple",
-          "Aides IA utiles sans réglages compliqués",
-          "Gratuit"
-        ],
-        safetyTitle: "Avertissement important de sécurité",
-        safetyBody: "Naptio n’est pas un dispositif médical et ne diagnostique, ne traite ni ne prévient aucune maladie. C’est un assistant, pas un substitut à la surveillance parentale ni aux conseils de professionnels. Suivez toujours les recommandations de sommeil sécurisé.",
-        teamTitle: "L’équipe Naptio",
-        teamBody: "Nous sommes une petite équipe, proche du terrain, qui aime créer des outils utiles où la confidentialité passe en premier. Avant Naptio, nous avons passé des années à concevoir des modèles très fiables dans un secteur très exigeant — un travail qui nous a appris à privilégier la précision, la sécurité et la performance. Nous mettons aujourd’hui ce même soin au service de quelque chose de plus proche de nous : aider les familles à dormir un peu plus sereinement. Et nous nous engageons à garder Naptio accessible à tous, gratuitement."
-      },
-      pt: {
-        name: "Português", dir: "ltr",
-        title: "Sobre o Naptio",
-        intro1: "O Naptio é um baby monitor privado que funciona diretamente no seu navegador. Coloque um telefone extra no quarto do bebé como câmara e acompanhe a partir de outro telefone ou computador — sem contas, sem subscrições, sem anúncios.",
-        intro2: "",
-        howTitle: "Como funciona",
-        howBody: "O Naptio liga com segurança os seus próprios dispositivos e utiliza uma IA leve, a correr no próprio dispositivo, para o ajudar a notar os momentos que importam — como choro, movimentos maiores ou indícios de posição de sono. Como tudo funciona localmente, nada é enviado para a nuvem e não é preciso instalar aplicações.",
-        privacyTitle: "Privacidade por conceção",
-        privacyList: [
-          "O seu vídeo e áudio ficam consigo. Nunca vemos nem guardamos as imagens do seu bebé.",
-          "Seguro por omissão. As ligações entre os seus dispositivos são encriptadas de extremo a extremo.",
-          "O controlo é seu. Escolha os alertas que pretende, emparelhe/desemparelhe dispositivos e reponha quando quiser."
-        ],
-        whyTitle: "Porque os pais gostam",
-        whyList: [
-          "Funciona com os telefones e computadores que já tem",
-          "Configuração rápida com emparelhamento simples",
-          "Sinais úteis de IA sem definições complicadas",
-          "Gratuito"
-        ],
-        safetyTitle: "Nota importante de segurança",
-        safetyBody: "O Naptio não é um dispositivo médico e não diagnostica, trata ou previne qualquer condição. É um auxiliar, não um substituto da supervisão parental nem do aconselhamento profissional. Siga sempre as orientações de sono seguro.",
-        teamTitle: "A equipa Naptio",
-        teamBody: "Somos uma equipa pequena e prática que adora criar ferramentas úteis, com a privacidade em primeiro lugar. Antes do Naptio, passámos anos a construir modelos de alta fiabilidade numa área muito exigente — trabalho que nos ensinou a valorizar precisão, segurança e desempenho. Agora trazemos o mesmo cuidado para algo mais próximo de casa: ajudar as famílias a descansar um pouco melhor. E comprometemo-nos a manter o Naptio disponível para todos, gratuitamente."
-      },
-      ar: {
-        name: "العربية", dir: "rtl",
-        title: "نبذة عن Naptio",
-        intro1: "‏Naptio هو جهاز مراقبة أطفال خاص يعمل على جهازك مباشرة داخل المتصفح. ضع هاتفًا إضافيًا في غرفة الطفل ككاميرا وتابع من أي هاتف أو كمبيوتر آخر — بلا حسابات، بلا اشتراكات، بلا إعلانات.",
-        intro2: "",
-        howTitle: "كيف يعمل",
-        howBody: "يربط Naptio أجهزتك ببعضها بأمان ويستخدم ذكاءً اصطناعيًا خفيفًا يعمل على الجهاز لمساعدتك على ملاحظة اللحظات المهمة — مثل البكاء أو التحركات الكبيرة أو إشارات وضعية النوم. ولأن كل شيء يعمل محليًا، فلا يتم رفع أي شيء إلى السحابة ولا حاجة لتثبيت تطبيق.",
-        privacyTitle: "الخصوصية أولًا",
-        privacyList: [
-          "يبقى الفيديو والصوت لديك. نحن لا نرى أو نخزّن مقاطع طفلك.",
-          "أمان تلقائي. الاتصالات بين أجهزتك مشفّرة من طرف إلى طرف.",
-          "التحكم بين يديك. اختر التنبيهات، واقرن أو افصل الأجهزة، وأعد الضبط في أي وقت."
-        ],
-        whyTitle: "لماذا يفضله الأهل",
-        whyList: [
-          "يعمل مع الهواتف وأجهزة الكمبيوتر المتوفرة لديك",
-          "إعداد سريع وخطوات اقتران بسيطة",
-          "مؤشرات مفيدة من الذكاء الاصطناعي دون إعدادات معقّدة",
-          "مجاني"
-        ],
-        safetyTitle: "ملاحظة أمان مهمة",
-        safetyBody: "‏Naptio ليس جهازًا طبيًا ولا يشخّص أو يعالج أو يمنع أي حالة. إنه أداة مساعدة وليس بديلًا عن إشراف الوالدين أو المشورة المهنية. اتبع دائمًا إرشادات النوم الآمن.",
-        teamTitle: "فريق Naptio",
-        teamBody: "نحن فريق صغير وعملي نحب بناء أدوات مفيدة تضع الخصوصية أولًا. قبل Naptio أمضينا سنوات نطوّر نماذج عالية الاعتمادية في صناعة شديدة المتطلبات — ما علّمنا التركيز على الدقة والأمان والأداء. واليوم نضع هذا الاهتمام في شيء أقرب إلى قلوبنا: مساعدة العائلات على نوم أكثر راحة. ونحن ملتزمون بأن يبقى Naptio متاحًا للجميع مجانًا."
-      },
-      ru: {
-        name: "Русский", dir: "ltr",
-        title: "О Naptio",
-        intro1: "Naptio — это приватный детский монитор, который работает прямо в браузере на ваших устройствах. Поставьте запасной телефон в детской как камеру и наблюдайте с другого телефона или ноутбука — без аккаунтов, подписок и рекламы.",
-        intro2: "",
-        howTitle: "Как это работает",
-        howBody: "Naptio безопасно соединяет ваши устройства и использует лёгкий ИИ на самом устройстве, чтобы помогать замечать важные моменты — например плач, активные движения или сигналы позы сна. Поскольку всё работает локально, ничего не загружается в облако и не требуется установка приложения.",
-        privacyTitle: "Конфиденциальность по замыслу",
-        privacyList: [
-          "Ваше видео и звук остаются у вас. Мы никогда не видим и не храним записи вашего ребёнка.",
-          "Безопасность по умолчанию. Соединения между устройствами шифруются сквозным образом.",
-          "Вы контролируете процесс. Выбирайте нужные оповещения, подключайте/отключайте устройства и сбрасывайте настройки в любое время."
-        ],
-        whyTitle: "Почему родителям это нравится",
-        whyList: [
-          "Работает с телефонами и компьютерами, которые у вас уже есть",
-          "Быстрая настройка с простым сопряжением",
-          "Полезные подсказки ИИ без сложных настроек",
-          "Бесплатно"
-        ],
-        safetyTitle: "Важное замечание по безопасности",
-        safetyBody: "Naptio не является медицинским изделием и не предназначен для диагностики, лечения или профилактики заболеваний. Это помощник, а не замена присмотру родителей или профессиональным рекомендациям. Всегда следуйте правилам безопасного сна.",
-        teamTitle: "Команда Naptio",
-        teamBody: "Мы небольшая команда, которая любит создавать полезные продукты с приоритетом приватности. До Naptio мы много лет разрабатывали высоконадёжные модели в очень требовательной сфере — это научило нас ценить точность, безопасность и производительность. Теперь с тем же вниманием мы помогаем семьям отдыхать спокойнее и держим Naptio доступным для всех — бесплатно."
-      },
-      uk: {
-        name: "Українська", dir: "ltr",
-        title: "Про Naptio",
-        intro1: "Naptio — це приватний монітор для немовлят, що працює просто у вашому браузері. Поставте запасний телефон у дитячій як камеру та дивіться з іншого телефону або ноутбука — без обліковок, підписок і реклами.",
-        intro2: "",
-        howTitle: "Як це працює",
-        howBody: "Naptio безпечно з’єднує ваші пристрої та використовує легку локальну ШІ, щоб допомогти помічати важливі моменти — як-от плач, активні рухи чи підказки пози під час сну. Оскільки все працює локально, нічого не завантажується в хмару і не потрібно встановлювати застосунок.",
-        privacyTitle: "Конфіденційність за задумом",
-        privacyList: [
-          "Ваші відео та звук залишаються з вами. Ми ніколи не бачимо й не зберігаємо записи вашої дитини.",
-          "Безпека за замовчуванням. З’єднання між пристроями шифруються наскрізно.",
-          "Контроль у ваших руках. Обирайте потрібні сповіщення, з’єднуйте/від’єднуйте пристрої та скидайте налаштування будь-коли."
-        ],
-        whyTitle: "Чому це подобається батькам",
-        whyList: [
-          "Працює з телефонами та комп’ютерами, які у вас уже є",
-          "Швидкий старт із простим сполученням",
-          "Корисні підказки ШІ без складних налаштувань",
-          "Безкоштовно"
-        ],
-        safetyTitle: "Важлива примітка щодо безпеки",
-        safetyBody: "Naptio не є медичним виробом і не призначений для діагностики, лікування або профілактики захворювань. Це помічник, а не заміна батьківського нагляду чи професійних порад. Завжди дотримуйтесь рекомендацій безпечного сну.",
-        teamTitle: "Команда Naptio",
-        teamBody: "Ми невелика команда, що створює корисні інструменти із пріоритетом приватності. Раніше ми багато років розробляли високонадійні моделі в дуже вимогливій сфері — це навчило нас точності, безпеці та продуктивності. Тепер застосовуємо той самий підхід, щоб допомагати родинам відпочивати спокійніше, і тримаємо Naptio відкритим для всіх — безкоштовно."
-      },
-      he: {
-        name: "עברית", dir: "rtl",
-        title: "על Naptio",
-        intro1: "‏Naptio הוא מוניטור תינוקות פרטי שפועל ישירות בדפדפן במכשיר שלך. הניחו טלפון נוסף בחדר כמצלמה וצפו מכל טלפון או מחשב אחר — ללא חשבונות, ללא מנויים וללא פרסומות.",
-        intro2: "",
-        howTitle: "איך זה עובד",
-        howBody: "‏Naptio מחבר את המכשירים שלך בצורה מאובטחת ומשתמש ב-AI קל שרץ מקומית כדי לעזור לשים לב לרגעים חשובים — כמו בכי, תנועות גדולות או רמזים על תנוחת שינה. מאחר שהכול פועל מקומית, שום דבר לא מועלה לענן ואין צורך להתקין אפליקציה.",
-        privacyTitle: "פרטיות כעיקרון מנחה",
-        privacyList: [
-          "הווידאו והאודיו שלך נשארים אצלך. אנחנו לעולם לא רואים או שומרים צילומים של התינוק.",
-          "אבטחה כברירת מחדל. החיבור בין המכשירים מוצפן מקצה לקצה.",
-          "השליטה בידיים שלך. בחרי/בחר את ההתראות, חברי/חבר או נתקי/נתק מכשירים, ואפסו בכל עת."
-        ],
-        whyTitle: "למה הורים אוהבים את זה",
-        whyList: [
-          "עובד עם הטלפונים והמחשבים שכבר יש לכם",
-          "הגדרה מהירה עם תהליך צימוד פשוט",
-          "רמזי AI מועילים ללא הגדרות מורכבות",
-          "בחינם"
-        ],
-        safetyTitle: "הערת בטיחות חשובה",
-        safetyBody: "‏Naptio אינו מכשיר רפואי ואינו מאבחן, מטפל או מונע מצבים רפואיים. הוא כלי מסייע — לא תחליף להשגחת הורים או לייעוץ מקצועי. תמיד הקפידו על הנחיות שינה בטוחה.",
-        teamTitle: "צוות Naptio",
-        teamBody: "אנחנו צוות קטן ומעשי שאוהב לבנות כלים שימושיים עם פרטיות תחילה. לפני Naptio עבדנו שנים על מודלים אמינים במיוחד בתעשייה תובענית — מה שלימד אותנו להתמקד בדיוק, באבטחה ובביצועים. עכשיו אנחנו מביאים את אותה תשומת לב לדבר הקרוב לבית: לעזור למשפחות לנוח בראש שקט — ובחינם."
-      },
-      zh: {
-        name: "中文", dir: "ltr",
-        title: "关于 Naptio",
-        intro1: "Naptio 是一款在您设备上运行的私密婴儿监护工具，直接在浏览器中使用。把一部备用手机放在婴儿房作为摄像头，再用另一部手机或电脑查看——无需账号、无需订阅、无广告。",
-        intro2: "",
-        howTitle: "工作原理",
-        howBody: "Naptio 将您的设备安全连接，并使用在本地运行的轻量级 AI，帮助您捕捉关键时刻——例如哭声、较大的动作或睡姿提示。由于一切都在本地完成，不会上传到云端，也无需安装应用。",
-        privacyTitle: "从设计上保护隐私",
-        privacyList: [
-          "您的音视频只属于您。我们从不查看或存储您宝宝的影像。",
-          "默认安全。设备之间的连接采用端到端加密。",
-          "您说了算。选择需要的提醒，配对/取消配对设备，随时重置。"
-        ],
-        whyTitle: "家长为何喜欢",
-        whyList: [
-          "可直接使用您已有的手机与电脑",
-          "简单的配对流程，快速上手",
-          "有用的 AI 提示，无需复杂设置",
-          "免费使用"
-        ],
-        safetyTitle: "重要安全提示",
-        safetyBody: "Naptio 不是医疗设备，不能用于诊断、治疗或预防任何疾病。它只是辅助工具，不能替代家长看护或专业建议。请始终遵循安全睡眠指南。",
-        teamTitle: "Naptio 团队",
-        teamBody: "我们是一个小而专注的团队，热衷于打造实用、以隐私为先的工具。在做 Naptio 之前，我们多年专注于高可靠性模型，在严苛领域磨练了对准确性、安全性与性能的执着。现在，我们把同样的用心带到家人身边，让更多家庭睡得安心，而且免费。"
-      },
-      ko: {
-        name: "한국어", dir: "ltr",
-        title: "Naptio 소개",
-        intro1: "Naptio는 기기에서 직접 실행되는 프라이버시 중심 아기 모니터로, 브라우저만 있으면 됩니다. 여분의 휴대폰을 아기방 카메라로 두고, 다른 휴대폰이나 노트북에서 확인하세요—계정, 구독, 광고 모두 없습니다.",
-        intro2: "",
-        howTitle: "동작 방식",
-        howBody: "Naptio는 사용자의 기기끼리를 안전하게 연결하고, 온디바이스 경량 AI로 울음, 큰 움직임, 수면 자세 신호 같은 중요한 순간을 알아채도록 도와줍니다. 모든 처리가 로컬에서 이뤄지므로 클라우드 업로드가 없고 앱 설치도 필요 없습니다.",
-        privacyTitle: "설계 단계부터 프라이버시",
-        privacyList: [
-          "영상과 음성은 사용자에게만 남습니다. 아기 영상은 저장하거나 보지 않습니다.",
-          "기본적으로 안전합니다. 기기간 연결은 종단간 암호화됩니다.",
-          "사용자 제어. 원하는 알림을 선택하고, 기기 페어링/해제를 하거나 언제든 초기화할 수 있습니다."
-        ],
-        whyTitle: "부모들이 좋아하는 이유",
-        whyList: [
-          "이미 가지고 있는 휴대폰과 노트북으로 작동",
-          "간단한 페어링으로 빠른 설정",
-          "복잡한 설정 없는 유용한 AI 힌트",
-          "무료"
-        ],
-        safetyTitle: "중요 안전 안내",
-        safetyBody: "Naptio는 의료기기가 아니며 어떠한 질환도 진단·치료·예방하지 않습니다. 보호자 감독이나 전문가의 조언을 대신할 수 없습니다. 항상 안전 수면 수칙을 따르세요.",
-        teamTitle: "Naptio 팀",
-        teamBody: "우리는 프라이버시를 최우선으로 하는 유용한 도구를 만드는 것을 좋아하는 작은 팀입니다. Naptio 이전에 매우 까다로운 분야에서 고신뢰 모델을 다년간 구축하며 정확성, 보안, 성능에 집착하는 법을 배웠습니다. 이제 그 정성을 가정에 가까운 문제에 적용해, 가족들이 더 편히 쉴 수 있도록 돕습니다. 그리고 누구나 무료로 쓰실 수 있게 하겠습니다."
-      },
-      hi: {
-        name: "हिन्दी", dir: "ltr",
-        title: "Naptio के बारे में",
-        intro1: "Naptio एक निजी, ऑन-डिवाइस बेबी मॉनिटर है जो सीधे आपके ब्राउज़र में चलता है। नर्सरी में एक अतिरिक्त फ़ोन को कैमरा बना दें और किसी भी दूसरे फ़ोन या लैपटॉप से देखें—न खाता चाहिए, न सदस्यता, न विज्ञापन।",
-        intro2: "",
-        howTitle: "यह काम कैसे करता है",
-        howBody: "Naptio आपके डिवाइसों को सुरक्षित रूप से जोड़ता है और हल्का, ऑन-डिवाइस AI उपयोग करता है ताकि रोना, बड़े मूवमेंट या स्लीप-पोज संकेत जैसे महत्वपूर्ण पल आप तक पहुँचें। क्योंकि सब कुछ लोकल चलता है, क्लाउड पर कुछ अपलोड नहीं होता और कोई ऐप इंस्टॉल नहीं करनी पड़ती।",
-        privacyTitle: "डिज़ाइन से ही गोपनीयता",
-        privacyList: [
-          "आपका वीडियो और ऑडियो आपके पास ही रहता है। हम आपके बच्चे की फुटेज न देखते हैं, न सहेजते हैं।",
-          "डिफ़ॉल्ट रूप से सुरक्षित। आपके डिवाइसों के बीच कनेक्शन एंड-टू-एंड एन्क्रिप्टेड हैं।",
-          "नियंत्रण आपके हाथ में। किन अलर्ट्स की ज़रूरत है चुनें, डिवाइस पेयर/अनपेयर करें, या कभी भी रीसेट करें।"
-        ],
-        whyTitle: "माता-पिता इसे क्यों पसंद करते हैं",
-        whyList: [
-          "उन्हीं फ़ोनों और लैपटॉप के साथ काम करता है जो आपके पास हैं",
-          "सरल पेयरिंग के साथ तेज़ सेटअप",
-          "जटिल सेटिंग्स के बिना उपयोगी AI संकेत",
-          "मुफ़्त"
-        ],
-        safetyTitle: "महत्वपूर्ण सुरक्षा नोट",
-        safetyBody: "Naptio कोई चिकित्सा उपकरण नहीं है और किसी भी स्थिति का निदान, उपचार या रोकथाम नहीं करता। यह सहायक है—माता-पिता की निगरानी या पेशेवर सलाह का विकल्प नहीं। हमेशा सुरक्षित नींद के दिशा-निर्देशों का पालन करें।",
-        teamTitle: "Naptio टीम",
-        teamBody: "हम एक छोटी, व्यावहारिक टीम हैं जो प्राइवेसी-फर्स्ट, उपयोगी टूल बनाना पसंद करती है। Naptio से पहले, हमने एक अत्यंत चुनौतीपूर्ण क्षेत्र में उच्च-विश्वसनीयता वाले मॉडल वर्षों तक बनाए—जिसने हमें सटीकता, सुरक्षा और प्रदर्शन के प्रति समर्पित रहना सिखाया। अब वही देखभाल घर के करीब किसी चीज़ पर—परिवारों की बेहतर नींद—पर लगा रहे हैं, और Naptio सबके लिए मुफ़्त रखने के लिए प्रतिबद्ध हैं।"
-      },
-      ja: {
-        name: "日本語", dir: "ltr",
-        title: "Naptio について",
-        intro1: "Naptio はデバイス上で動作するプライバシー重視のベビーモニターです。ブラウザだけで使えます。予備のスマホをカメラとして寝室に置き、もう一台のスマホやノートPCから確認できます—アカウント、サブスク、広告は不要です。",
-        intro2: "",
-        howTitle: "仕組み",
-        howBody: "Naptio はあなたのデバイス同士を安全に接続し、デバイス上で動く軽量 AI によって、泣き声や大きな動き、睡眠姿勢のヒントなど大切な瞬間に気づけるよう支援します。すべてがローカルで処理されるため、クラウドにアップロードされることはなく、アプリのインストールも不要です。",
-        privacyTitle: "プライバシー・バイ・デザイン",
-        privacyList: [
-          "映像と音声はあなたの手元に留まります。私たちが赤ちゃんの映像を見ることも保存することもありません。",
-          "既定で安全。デバイス間の接続はエンドツーエンドで暗号化されます。",
-          "コントロールはあなたに。必要なアラートを選び、デバイスのペア/解除やリセットもいつでも可能です。"
-        ],
-        whyTitle: "選ばれる理由",
-        whyList: [
-          "すでに持っているスマホやPCで使える",
-          "シンプルなペアリングで素早くセットアップ",
-          "面倒な設定なしで役立つ AI ヒント",
-          "無料"
-        ],
-        safetyTitle: "重要な安全に関する注意",
-        safetyBody: "Naptio は医療機器ではなく、いかなる症状の診断・治療・予防も行いません。保護者の見守りや専門家の助言の代替にはなりません。常に安全な睡眠ガイドラインに従ってください。",
-        teamTitle: "Naptio チーム",
-        teamBody: "私たちは、プライバシーを第一に考えた役立つツール作りを愛する少人数のチームです。Naptio 以前は非常に要求の厳しい分野で高信頼モデルを長年磨き、精度・セキュリティ・性能へのこだわりを培いました。今、そのこだわりを家庭に近い課題に活かし、家族の安らかな休息を支えます。Naptio は誰もが無料で使えるように提供し続けます。"
+  <!-- Language switching logic -->
+  <script>
+    (function() {
+      const select = document.getElementById('lang');
+      const KEY = 'naptio_lang';
+      const rtlLangs = new Set(['ar', 'he-IL', 'ur-PK', 'arz-EG']);
+
+      function hasArticle(code) {
+        return !!document.querySelector(`.i18n[data-lang="${code}"]`);
       }
-    };
 
-    const $ = (id) => document.getElementById(id);
+      function activate(code) {
+        document.querySelectorAll('.i18n').forEach(el => {
+          el.classList.toggle('active', el.getAttribute('data-lang') === code);
+        });
+      }
 
-    function render(lang) {
-      const t = I18N[lang] || I18N.en;
+      function applyLang(code) {
+        const finalCode = hasArticle(code) ? code : 'en-GB';
+        document.documentElement.lang = finalCode;
+        document.documentElement.dir = rtlLangs.has(finalCode) ? 'rtl' : 'ltr';
+        activate(finalCode);
+      }
 
-      // html lang/dir + body RTL class
-      document.documentElement.lang = lang;
-      document.documentElement.dir  = t.dir || "ltr";
-      document.body.classList.toggle('rtl', (t.dir === 'rtl'));
+      // Init from storage or default
+      const saved = localStorage.getItem(KEY);
+      if (saved && select.querySelector(`option[value="${saved}"]`)) {
+        select.value = saved;
+      }
+      applyLang(select.value);
 
-      // Headings & paragraphs
-      $('t-title').textContent        = t.title;
-      $('t-intro-1').textContent      = t.intro1 || '';
-      $('t-intro-2').textContent      = t.intro2 || '';
-      $('t-how-title').textContent    = t.howTitle;
-      $('t-how-body').textContent     = t.howBody;
-      $('t-privacy-title').textContent= t.privacyTitle;
-      $('t-why-title').textContent    = t.whyTitle;
-      $('t-safety-title').textContent = t.safetyTitle;
-      $('t-safety-body').textContent  = t.safetyBody;
-      $('t-team-title').textContent   = t.teamTitle;
-      $('t-team-body').textContent    = t.teamBody;
-
-      // Lists
-      const priv = $('t-privacy-list'); priv.innerHTML = '';
-      (t.privacyList || []).forEach(x => {
-        const li = document.createElement('li'); li.textContent = x; priv.appendChild(li);
+      // Persist + apply
+      select.addEventListener('change', () => {
+        localStorage.setItem(KEY, select.value);
+        applyLang(select.value);
       });
-
-      const why = $('t-why-list'); why.innerHTML = '';
-      (t.whyList || []).forEach(x => {
-        const li = document.createElement('li'); li.textContent = x; why.appendChild(li);
-      });
-    }
-
-    // Init: restore saved lang or default to English
-    const select = $('lang');
-    const saved = localStorage.getItem('naptio:about:lang');
-    if (saved && I18N[saved]) select.value = saved;
-
-    render(select.value);
-
-    // Change handler
-    select.addEventListener('change', () => {
-      const lang = select.value;
-      localStorage.setItem('naptio:about:lang', lang);
-      render(lang);
-    });
+    })();
   </script>
 
-<!-- analytics -->
-<script type="module">
-  import { installAnalytics } from '/hungryface/shared/analytics.js';
-  window.analytics = installAnalytics({ feature: 'naptio-about' });
-  // Later: window.analytics.event('about_opened');
-</script>
-  
+  <!-- Shared sidebar (hamburger + drawer) -->
+  <script type="module" src="/hungryface/webrtc/receiver/shared/sidebar.js" defer></script>
 </body>
 </html>
